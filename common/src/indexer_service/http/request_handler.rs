@@ -14,13 +14,12 @@ use reqwest::StatusCode;
 use thegraph::types::DeploymentId;
 use tracing::trace;
 
-use crate::{indexer_service::http::IndexerServiceResponse, prelude::AttestationSigner};
-
 use super::{
     indexer_service::{IndexerServiceError, IndexerServiceState},
     tap_receipt_header::TapReceipt,
     IndexerServiceImpl,
 };
+use crate::{indexer_service::http::IndexerServiceResponse, prelude::AttestationSigner};
 
 #[autometrics::autometrics]
 pub async fn request_handler<I>(

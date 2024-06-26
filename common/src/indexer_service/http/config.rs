@@ -4,8 +4,7 @@
 use std::net::SocketAddr;
 
 use serde::{Deserialize, Serialize};
-use thegraph::types::Address;
-use thegraph::types::DeploymentId;
+use thegraph::types::{Address, DeploymentId};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct DatabaseConfig {

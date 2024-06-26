@@ -6,17 +6,14 @@ use std::time::Duration;
 use indexer_common::prelude::{
     escrow_accounts, indexer_allocations, DeploymentDetails, SubgraphClient,
 };
-use ractor::concurrency::JoinHandle;
-use ractor::{Actor, ActorRef};
-
-use crate::agent::sender_accounts_manager::{
-    SenderAccountsManagerArgs, SenderAccountsManagerMessage,
-};
-use crate::config::{
-    Config, EscrowSubgraph, Ethereum, IndexerInfrastructure, NetworkSubgraph, Tap,
-};
-use crate::{database, CONFIG, EIP_712_DOMAIN};
+use ractor::{concurrency::JoinHandle, Actor, ActorRef};
 use sender_accounts_manager::SenderAccountsManager;
+
+use crate::{
+    agent::sender_accounts_manager::{SenderAccountsManagerArgs, SenderAccountsManagerMessage},
+    config::{Config, EscrowSubgraph, Ethereum, IndexerInfrastructure, NetworkSubgraph, Tap},
+    database, CONFIG, EIP_712_DOMAIN,
+};
 
 pub mod sender_account;
 pub mod sender_accounts_manager;

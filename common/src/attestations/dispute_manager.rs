@@ -65,13 +65,12 @@ mod test {
         Mock, MockServer, ResponseTemplate,
     };
 
+    use super::*;
     use crate::{
         prelude::SubgraphClient,
         subgraph_client::DeploymentDetails,
         test_vectors::{self, DISPUTE_MANAGER_ADDRESS},
     };
-
-    use super::*;
 
     async fn setup_mock_network_subgraph() -> (&'static SubgraphClient, MockServer) {
         // Set up a mock network subgraph

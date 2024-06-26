@@ -6,12 +6,13 @@ use std::{
     time::{Duration, SystemTime, UNIX_EPOCH},
 };
 
-use super::Allocation;
-use crate::prelude::SubgraphClient;
 use eventuals::{timer, Eventual, EventualExt};
 use thegraph::types::Address;
 use tokio::time::sleep;
 use tracing::warn;
+
+use super::Allocation;
+use crate::prelude::SubgraphClient;
 
 /// An always up-to-date list of an indexer's active and recently closed allocations.
 pub fn indexer_allocations(
@@ -107,9 +108,8 @@ mod test {
         "https://api.thegraph.com/subgraphs/name/graphprotocol/graph-network-arbitrum";
     use std::str::FromStr;
 
-    use crate::{prelude::SubgraphClient, subgraph_client::DeploymentDetails};
-
     use super::*;
+    use crate::{prelude::SubgraphClient, subgraph_client::DeploymentDetails};
 
     fn network_subgraph_client() -> &'static SubgraphClient {
         Box::leak(Box::new(SubgraphClient::new(

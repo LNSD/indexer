@@ -32,16 +32,21 @@ use tap_core::{
 use thegraph::types::Address;
 use tracing::{error, warn};
 
-use crate::lazy_static;
-
-use crate::agent::sender_account::SenderAccountMessage;
-use crate::agent::sender_accounts_manager::NewReceiptNotification;
-use crate::agent::unaggregated_receipts::UnaggregatedReceipts;
 use crate::{
+    agent::{
+        sender_account::SenderAccountMessage, sender_accounts_manager::NewReceiptNotification,
+        unaggregated_receipts::UnaggregatedReceipts,
+    },
     config::{self},
-    tap::context::{checks::Signature, TapAgentContext},
-    tap::signers_trimmed,
-    tap::{context::checks::AllocationId, escrow_adapter::EscrowAdapter},
+    lazy_static,
+    tap::{
+        context::{
+            checks::{AllocationId, Signature},
+            TapAgentContext,
+        },
+        escrow_adapter::EscrowAdapter,
+        signers_trimmed,
+    },
 };
 
 lazy_static! {
@@ -715,6 +720,32 @@ impl SenderAllocationState {
 
 #[cfg(test)]
 pub mod tests {
+    use std::{
+        collections::HashMap,
+        sync::{Arc, Mutex},
+    };
+
+    use eventuals::Eventual;
+    use futures::future::join_all;
+    use indexer_common::{
+        escrow_accounts::EscrowAccounts,
+        subgraph_client::{DeploymentDetails, SubgraphClient},
+    };
+    use ractor::{
+        call, cast, concurrency::JoinHandle, Actor, ActorProcessingErr, ActorRef, ActorStatus,
+    };
+    use serde_json::json;
+    use sqlx::PgPool;
+    use tap_aggregator::{jsonrpsee_helpers::JsonRpcResponse, server::run_server};
+    use tap_core::receipt::{
+        checks::{Check, Checks},
+        Checking, ReceiptWithState,
+    };
+    use wiremock::{
+        matchers::{body_string_contains, method},
+        Mock, MockServer, Respond, ResponseTemplate,
+    };
+
     use super::{
         SenderAllocation, SenderAllocationArgs, SenderAllocationMessage, SenderAllocationState,
     };
@@ -732,30 +763,6 @@ pub mod tests {
                 TAP_EIP712_DOMAIN_SEPARATOR,
             },
         },
-    };
-    use eventuals::Eventual;
-    use futures::future::join_all;
-    use indexer_common::{
-        escrow_accounts::EscrowAccounts,
-        subgraph_client::{DeploymentDetails, SubgraphClient},
-    };
-    use ractor::{
-        call, cast, concurrency::JoinHandle, Actor, ActorProcessingErr, ActorRef, ActorStatus,
-    };
-    use serde_json::json;
-    use sqlx::PgPool;
-    use std::{
-        collections::HashMap,
-        sync::{Arc, Mutex},
-    };
-    use tap_aggregator::{jsonrpsee_helpers::JsonRpcResponse, server::run_server};
-    use tap_core::receipt::{
-        checks::{Check, Checks},
-        Checking, ReceiptWithState,
-    };
-    use wiremock::{
-        matchers::{body_string_contains, method},
-        Mock, MockServer, Respond, ResponseTemplate,
     };
 
     const DUMMY_URL: &str = "http://localhost:1234";

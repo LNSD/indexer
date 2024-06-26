@@ -1,18 +1,20 @@
 // Copyright 2023-, GraphOps and Semiotic Labs.
 // SPDX-License-Identifier: Apache-2.0
 
-use std::collections::HashSet;
-use std::time::Duration;
-use std::{collections::HashMap, str::FromStr};
+use std::{
+    collections::{HashMap, HashSet},
+    str::FromStr,
+    time::Duration,
+};
 
-use crate::agent::sender_allocation::SenderAllocationMessage;
-use crate::lazy_static;
 use alloy_sol_types::Eip712Domain;
-use anyhow::Result;
-use anyhow::{anyhow, bail};
+use anyhow::{anyhow, bail, Result};
 use eventuals::{Eventual, EventualExt, PipeHandle};
-use indexer_common::escrow_accounts::EscrowAccounts;
-use indexer_common::prelude::{Allocation, SubgraphClient};
+use indexer_common::{
+    escrow_accounts::EscrowAccounts,
+    prelude::{Allocation, SubgraphClient},
+};
+use prometheus::{register_counter_vec, CounterVec};
 use ractor::{Actor, ActorCell, ActorProcessingErr, ActorRef, SupervisionEvent};
 use serde::Deserialize;
 use sqlx::{postgres::PgListener, PgPool};
@@ -20,10 +22,8 @@ use thegraph::types::Address;
 use tokio::select;
 use tracing::{error, warn};
 
-use prometheus::{register_counter_vec, CounterVec};
-
 use super::sender_account::{SenderAccount, SenderAccountArgs, SenderAccountMessage};
-use crate::config;
+use crate::{agent::sender_allocation::SenderAllocationMessage, config, lazy_static};
 
 lazy_static! {
     static ref RECEIPTS_CREATED: CounterVec = register_counter_vec!(
@@ -556,31 +556,41 @@ async fn handle_notification(
 
 #[cfg(test)]
 mod tests {
+    use std::{
+        collections::{HashMap, HashSet},
+        sync::{Arc, Mutex},
+        time::Duration,
+    };
+
+    use alloy_primitives::Address;
+    use eventuals::{Eventual, EventualExt};
+    use indexer_common::{
+        allocations::Allocation,
+        escrow_accounts::EscrowAccounts,
+        prelude::{DeploymentDetails, SubgraphClient},
+    };
+    use ractor::{concurrency::JoinHandle, Actor, ActorProcessingErr, ActorRef};
+    use sqlx::{postgres::PgListener, PgPool};
+
     use super::{
         new_receipts_watcher, SenderAccountsManager, SenderAccountsManagerArgs,
         SenderAccountsManagerMessage, State,
     };
-    use crate::agent::sender_account::tests::{MockSenderAllocation, PREFIX_ID};
-    use crate::agent::sender_account::SenderAccountMessage;
-    use crate::agent::sender_accounts_manager::{handle_notification, NewReceiptNotification};
-    use crate::agent::sender_allocation::tests::MockSenderAccount;
-    use crate::config;
-    use crate::tap::test_utils::{
-        create_rav, create_received_receipt, store_rav, store_receipt, ALLOCATION_ID_0,
-        ALLOCATION_ID_1, INDEXER, SENDER, SENDER_2, SIGNER, TAP_EIP712_DOMAIN_SEPARATOR,
+    use crate::{
+        agent::{
+            sender_account::{
+                tests::{MockSenderAllocation, PREFIX_ID},
+                SenderAccountMessage,
+            },
+            sender_accounts_manager::{handle_notification, NewReceiptNotification},
+            sender_allocation::tests::MockSenderAccount,
+        },
+        config,
+        tap::test_utils::{
+            create_rav, create_received_receipt, store_rav, store_receipt, ALLOCATION_ID_0,
+            ALLOCATION_ID_1, INDEXER, SENDER, SENDER_2, SIGNER, TAP_EIP712_DOMAIN_SEPARATOR,
+        },
     };
-    use alloy_primitives::Address;
-    use eventuals::{Eventual, EventualExt};
-    use indexer_common::allocations::Allocation;
-    use indexer_common::escrow_accounts::EscrowAccounts;
-    use indexer_common::prelude::{DeploymentDetails, SubgraphClient};
-    use ractor::concurrency::JoinHandle;
-    use ractor::{Actor, ActorProcessingErr, ActorRef};
-    use sqlx::postgres::PgListener;
-    use sqlx::PgPool;
-    use std::collections::{HashMap, HashSet};
-    use std::sync::{Arc, Mutex};
-    use std::time::Duration;
 
     const DUMMY_URL: &str = "http://localhost:1234";
 

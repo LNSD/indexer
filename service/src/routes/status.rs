@@ -1,8 +1,7 @@
 // Copyright 2023-, GraphOps and Semiotic Labs.
 // SPDX-License-Identifier: Apache-2.0
 
-use std::collections::HashSet;
-use std::sync::Arc;
+use std::{collections::HashSet, sync::Arc};
 
 use async_graphql_axum::GraphQLRequest;
 use axum::{extract::State, response::IntoResponse, Json};

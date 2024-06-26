@@ -17,14 +17,17 @@ pub mod tap;
 mod test_vectors;
 
 pub mod prelude {
-    pub use super::allocations::{
-        monitor::indexer_allocations, Allocation, AllocationStatus, SubgraphDeployment,
+    pub use super::{
+        allocations::{
+            monitor::indexer_allocations, Allocation, AllocationStatus, SubgraphDeployment,
+        },
+        attestations::{
+            dispute_manager::dispute_manager, signer::AttestationSigner,
+            signers::attestation_signers,
+        },
+        escrow_accounts::escrow_accounts,
+        indexer_errors,
+        subgraph_client::{DeploymentDetails, Query, QueryVariables, SubgraphClient},
+        tap::IndexerTapContext,
     };
-    pub use super::attestations::{
-        dispute_manager::dispute_manager, signer::AttestationSigner, signers::attestation_signers,
-    };
-    pub use super::escrow_accounts::escrow_accounts;
-    pub use super::indexer_errors;
-    pub use super::subgraph_client::{DeploymentDetails, Query, QueryVariables, SubgraphClient};
-    pub use super::tap::IndexerTapContext;
 }

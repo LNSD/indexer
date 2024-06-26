@@ -2,11 +2,10 @@
 // SPDX-License-Identifier: Apache-2.0
 
 use anyhow::Result;
+use indexer_tap_agent::{agent, metrics, CONFIG};
 use ractor::ActorStatus;
 use tokio::signal::unix::{signal, SignalKind};
 use tracing::{debug, error, info};
-
-use indexer_tap_agent::{agent, metrics, CONFIG};
 
 #[tokio::main]
 async fn main() -> Result<()> {

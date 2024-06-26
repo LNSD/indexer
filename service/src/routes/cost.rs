@@ -1,8 +1,7 @@
 // Copyright 2023-, GraphOps and Semiotic Labs.
 // SPDX-License-Identifier: Apache-2.0
 
-use std::str::FromStr;
-use std::sync::Arc;
+use std::{str::FromStr, sync::Arc};
 
 use async_graphql::{Context, EmptyMutation, EmptySubscription, Object, Schema, SimpleObject};
 use async_graphql_axum::{GraphQLRequest, GraphQLResponse};
@@ -11,8 +10,10 @@ use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use thegraph::types::DeploymentId;
 
-use crate::database::{self, CostModel};
-use crate::service::SubgraphServiceState;
+use crate::{
+    database::{self, CostModel},
+    service::SubgraphServiceState,
+};
 
 #[derive(Clone, Debug, Serialize, Deserialize, SimpleObject)]
 pub struct GraphQlCostModel {

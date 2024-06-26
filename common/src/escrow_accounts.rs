@@ -227,13 +227,13 @@ pub fn escrow_accounts(
 #[cfg(test)]
 mod tests {
     use test_log::test;
-    use wiremock::matchers::{method, path};
-    use wiremock::{Mock, MockServer, ResponseTemplate};
-
-    use crate::prelude::DeploymentDetails;
-    use crate::test_vectors;
+    use wiremock::{
+        matchers::{method, path},
+        Mock, MockServer, ResponseTemplate,
+    };
 
     use super::*;
+    use crate::{prelude::DeploymentDetails, test_vectors};
 
     #[test]
     fn test_new_escrow_accounts() {

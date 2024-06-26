@@ -1,7 +1,6 @@
 // Copyright 2023-, GraphOps and Semiotic Labs.
 // SPDX-License-Identifier: Apache-2.0
 
-use super::monitor::{monitor_deployment_status, DeploymentStatus};
 use anyhow::anyhow;
 use axum::body::Bytes;
 use eventuals::Eventual;
@@ -16,6 +15,8 @@ use thegraph_graphql_http::{
 };
 use tokio::sync::Mutex;
 use tracing::warn;
+
+use super::monitor::{monitor_deployment_status, DeploymentStatus};
 
 #[derive(Clone)]
 pub struct Query {
@@ -311,12 +312,13 @@ mod test {
     use std::str::FromStr;
 
     use serde_json::json;
-    use wiremock::matchers::{method, path};
-    use wiremock::{Mock, MockServer, ResponseTemplate};
-
-    use crate::test_vectors::{self};
+    use wiremock::{
+        matchers::{method, path},
+        Mock, MockServer, ResponseTemplate,
+    };
 
     use super::*;
+    use crate::test_vectors::{self};
 
     const NETWORK_SUBGRAPH_URL: &str =
         "https://api.thegraph.com/subgraphs/name/graphprotocol/graph-network-goerli";

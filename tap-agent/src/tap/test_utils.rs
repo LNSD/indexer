@@ -4,14 +4,11 @@
 use std::str::FromStr;
 
 use alloy_primitives::hex::ToHex;
-use bigdecimal::num_bigint::BigInt;
-
-use sqlx::types::BigDecimal;
-
 use alloy_sol_types::{eip712_domain, Eip712Domain};
+use bigdecimal::num_bigint::BigInt;
 use ethers_signers::{coins_bip39::English, LocalWallet, MnemonicBuilder, Signer};
 use lazy_static::lazy_static;
-use sqlx::PgPool;
+use sqlx::{types::BigDecimal, PgPool};
 use tap_core::{
     rav::{ReceiptAggregateVoucher, SignedRAV},
     receipt::{Checking, Receipt, ReceiptWithState, SignedReceipt},

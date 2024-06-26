@@ -1,13 +1,12 @@
 // Copyright 2023-, GraphOps and Semiotic Labs.
 // SPDX-License-Identifier: Apache-2.0
 
+use std::{collections::HashMap, path::PathBuf, str::FromStr};
+
+use anyhow::Result;
 use clap::Parser;
 use indexer_config::{Config as IndexerConfig, ConfigPrefix};
 use reqwest::Url;
-use std::path::PathBuf;
-use std::{collections::HashMap, str::FromStr};
-
-use anyhow::Result;
 use thegraph::types::{Address, DeploymentId};
 use tracing::subscriber::{set_global_default, SetGlobalDefaultError};
 use tracing_subscriber::{EnvFilter, FmtSubscriber};

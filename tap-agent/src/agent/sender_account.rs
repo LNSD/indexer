@@ -1,32 +1,35 @@
 // Copyright 2023-, GraphOps and Semiotic Labs.
 // SPDX-License-Identifier: Apache-2.0
 
-use bigdecimal::num_bigint::ToBigInt;
-use bigdecimal::ToPrimitive;
-use std::collections::{HashMap, HashSet};
-use std::str::FromStr;
-use std::time::Duration;
-use tokio::task::JoinHandle;
+use std::{
+    collections::{HashMap, HashSet},
+    str::FromStr,
+    time::Duration,
+};
 
 use alloy_primitives::hex::ToHex;
 use alloy_sol_types::Eip712Domain;
 use anyhow::Result;
+use bigdecimal::{num_bigint::ToBigInt, ToPrimitive};
 use ethereum_types::U256;
 use eventuals::{Eventual, EventualExt, PipeHandle};
-use indexer_common::subgraph_client::Query;
-use indexer_common::{escrow_accounts::EscrowAccounts, prelude::SubgraphClient};
+use indexer_common::{
+    escrow_accounts::EscrowAccounts, prelude::SubgraphClient, subgraph_client::Query,
+};
 use ractor::{call, Actor, ActorProcessingErr, ActorRef, MessagingErr, SupervisionEvent};
 use serde::Deserialize;
 use sqlx::PgPool;
 use tap_core::rav::SignedRAV;
 use thegraph::types::Address;
+use tokio::task::JoinHandle;
 use tracing::{error, Level};
 
 use super::sender_allocation::{SenderAllocation, SenderAllocationArgs};
-use crate::agent::sender_allocation::SenderAllocationMessage;
-use crate::agent::sender_fee_tracker::SenderFeeTracker;
-use crate::agent::unaggregated_receipts::UnaggregatedReceipts;
 use crate::{
+    agent::{
+        sender_allocation::SenderAllocationMessage, sender_fee_tracker::SenderFeeTracker,
+        unaggregated_receipts::UnaggregatedReceipts,
+    },
     config::{self},
     tap::escrow_adapter::EscrowAdapter,
 };
@@ -708,30 +711,39 @@ impl Actor for SenderAccount {
 
 #[cfg(test)]
 pub mod tests {
-    use super::{SenderAccount, SenderAccountArgs, SenderAccountMessage};
-    use crate::agent::sender_accounts_manager::NewReceiptNotification;
-    use crate::agent::sender_allocation::SenderAllocationMessage;
-    use crate::agent::unaggregated_receipts::UnaggregatedReceipts;
-    use crate::config;
-    use crate::tap::test_utils::{
-        create_rav, store_rav_with_options, ALLOCATION_ID_0, ALLOCATION_ID_1, INDEXER, SENDER,
-        SIGNER, TAP_EIP712_DOMAIN_SEPARATOR,
+    use std::{
+        collections::{HashMap, HashSet},
+        sync::{atomic::AtomicU32, Arc, Mutex},
+        time::Duration,
     };
-    use alloy_primitives::hex::ToHex;
-    use alloy_primitives::Address;
+
+    use alloy_primitives::{hex::ToHex, Address};
     use eventuals::{Eventual, EventualWriter};
-    use indexer_common::escrow_accounts::EscrowAccounts;
-    use indexer_common::prelude::{DeploymentDetails, SubgraphClient};
-    use ractor::concurrency::JoinHandle;
-    use ractor::{call, Actor, ActorProcessingErr, ActorRef, ActorStatus};
+    use indexer_common::{
+        escrow_accounts::EscrowAccounts,
+        prelude::{DeploymentDetails, SubgraphClient},
+    };
+    use ractor::{call, concurrency::JoinHandle, Actor, ActorProcessingErr, ActorRef, ActorStatus};
     use serde_json::json;
     use sqlx::PgPool;
-    use std::collections::{HashMap, HashSet};
-    use std::sync::atomic::AtomicU32;
-    use std::sync::{Arc, Mutex};
-    use std::time::Duration;
-    use wiremock::matchers::{body_string_contains, method};
-    use wiremock::{Mock, MockServer, ResponseTemplate};
+    use wiremock::{
+        matchers::{body_string_contains, method},
+        Mock, MockServer, ResponseTemplate,
+    };
+
+    use super::{SenderAccount, SenderAccountArgs, SenderAccountMessage};
+    use crate::{
+        agent::{
+            sender_accounts_manager::NewReceiptNotification,
+            sender_allocation::SenderAllocationMessage,
+            unaggregated_receipts::UnaggregatedReceipts,
+        },
+        config,
+        tap::test_utils::{
+            create_rav, store_rav_with_options, ALLOCATION_ID_0, ALLOCATION_ID_1, INDEXER, SENDER,
+            SIGNER, TAP_EIP712_DOMAIN_SEPARATOR,
+        },
+    };
 
     // we implement the PartialEq and Eq traits for SenderAccountMessage to be able to compare
     impl Eq for SenderAccountMessage {}

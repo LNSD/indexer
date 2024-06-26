@@ -84,8 +84,10 @@ pub fn monitor_deployment_status(
 mod tests {
     use std::str::FromStr;
 
-    use wiremock::matchers::{method, path};
-    use wiremock::{Mock, MockServer, ResponseTemplate};
+    use wiremock::{
+        matchers::{method, path},
+        Mock, MockServer, ResponseTemplate,
+    };
 
     use super::*;
 

@@ -1,21 +1,20 @@
 // Copyright 2023-, GraphOps and Semiotic Labs.
 // SPDX-License-Identifier: Apache-2.0
 
+use std::{collections::HashMap, net::SocketAddr, path::PathBuf, str::FromStr, time::Duration};
+
+use alloy_primitives::Address;
 use bigdecimal::{BigDecimal, FromPrimitive, ToPrimitive};
+use bip39::Mnemonic;
 use figment::{
     providers::{Env, Format, Toml},
     Figment,
 };
-use serde_repr::Deserialize_repr;
-use serde_with::DurationSecondsWithFrac;
-use std::{collections::HashMap, net::SocketAddr, path::PathBuf, str::FromStr, time::Duration};
-use tracing::warn;
-
-use alloy_primitives::Address;
-use bip39::Mnemonic;
 use serde::Deserialize;
-use serde_with::serde_as;
+use serde_repr::Deserialize_repr;
+use serde_with::{serde_as, DurationSecondsWithFrac};
 use thegraph::types::DeploymentId;
+use tracing::warn;
 use url::Url;
 
 use crate::NonZeroGRT;

@@ -4,9 +4,8 @@
 use axum::{body::Bytes, http::HeaderMap, response::IntoResponse, Extension};
 use tracing::warn;
 
-use crate::subgraph_client::SubgraphClient;
-
 use super::{indexer_service::IndexerServiceError, IndexerServiceImpl};
+use crate::subgraph_client::SubgraphClient;
 
 #[autometrics::autometrics]
 pub async fn static_subgraph_request_handler<I>(

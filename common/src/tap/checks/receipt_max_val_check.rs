@@ -34,22 +34,20 @@ impl Check for ReceiptMaxValueCheck {
 }
 #[cfg(test)]
 mod tests {
-    use std::str::FromStr;
-    use std::time::Duration;
-    use std::time::SystemTime;
+    use std::{
+        str::FromStr,
+        time::{Duration, SystemTime},
+    };
 
     use alloy_primitives::Address;
-    use alloy_sol_types::eip712_domain;
-    use alloy_sol_types::Eip712Domain;
-
-    use ethers::signers::coins_bip39::English;
-    use ethers::signers::{LocalWallet, MnemonicBuilder};
-
-    use super::*;
+    use alloy_sol_types::{eip712_domain, Eip712Domain};
+    use ethers::signers::{coins_bip39::English, LocalWallet, MnemonicBuilder};
     use tap_core::{
         receipt::{checks::Check, Checking, Receipt, ReceiptWithState},
         signed_message::EIP712SignedMessage,
     };
+
+    use super::*;
 
     fn create_signed_receipt_with_custom_value(value: u128) -> ReceiptWithState<Checking> {
         let index: u32 = 0;

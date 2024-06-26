@@ -1,20 +1,23 @@
 // Copyright 2023-, GraphOps and Semiotic Labs.
 // SPDX-License-Identifier: Apache-2.0
 
-use crate::escrow_accounts::EscrowAccounts;
+use std::{
+    collections::HashSet,
+    str::FromStr,
+    sync::{Arc, RwLock},
+};
+
 use alloy_sol_types::Eip712Domain;
 use eventuals::Eventual;
-use sqlx::postgres::PgListener;
-use sqlx::PgPool;
-use std::collections::HashSet;
-use std::sync::RwLock;
-use std::{str::FromStr, sync::Arc};
+use sqlx::{postgres::PgListener, PgPool};
 use tap_core::receipt::{
     checks::{Check, CheckResult},
     Checking, ReceiptWithState,
 };
 use thegraph::types::Address;
 use tracing::error;
+
+use crate::escrow_accounts::EscrowAccounts;
 
 pub struct DenyListCheck {
     escrow_accounts: Eventual<EscrowAccounts>,
@@ -191,9 +194,8 @@ mod tests {
     use alloy_primitives::hex::ToHex;
     use tap_core::receipt::ReceiptWithState;
 
-    use crate::test_vectors::{self, create_signed_receipt, TAP_SENDER};
-
     use super::*;
+    use crate::test_vectors::{self, create_signed_receipt, TAP_SENDER};
 
     const ALLOCATION_ID: &str = "0xdeadbeefcafebabedeadbeefcafebabedeadbeef";
 
