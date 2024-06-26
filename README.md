@@ -4,10 +4,16 @@ indexer
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](./LICENSE)
 [![ci](https://github.com/LNSD/indexer/actions/workflows/ci.yml/badge.svg)](https://github.com/LNSD/indexer/actions/workflows/ci.yml)
 
-An alternative implementation for _The Graph_ [indexer service](https://github.com/graphprotocol/indexer).
+An alternative implementation for _The Graph_ [indexer](https://github.com/graphprotocol/indexer) software.
 
 > [!Warning]
 > This is a work in progress and is not ready for production use.
+
+## Fork notice
+
+The present code is a fork of the [graphprotocol/indexer-rs](https://github.com/graphprotocol/indexer-rs) project
+licensed under _Apache License, Version 2.0_. The fork occurred at commit `61ce994f4ea58d85f2db3ca24aa589fad71b383e`.
+
 
 ## License
 
