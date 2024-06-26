@@ -1,5 +1,4 @@
-name: License headers check
-
+name: licenses
 on:
   push:
     branches: [ main, dev ]
@@ -8,7 +7,6 @@ on:
 
 jobs:
   check:
-    name: License headers check
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -17,6 +15,7 @@ jobs:
           wget https://github.com/google/addlicense/releases/download/v1.1.1/addlicense_1.1.1_Linux_x86_64.tar.gz
           tar -xzf addlicense_1.1.1_Linux_x86_64.tar.gz 
           sudo mv addlicense /usr/local/bin
+
       - name: Check license headers
         run: >
           addlicense \
