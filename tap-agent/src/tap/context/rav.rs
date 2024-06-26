@@ -3,15 +3,18 @@
 
 use std::str::FromStr;
 
-use super::{error::AdapterError, TapAgentContext};
 use alloy_primitives::{hex::ToHex, Address};
-use bigdecimal::num_bigint::{BigInt, ToBigInt};
-use bigdecimal::ToPrimitive;
+use bigdecimal::{
+    num_bigint::{BigInt, ToBigInt},
+    ToPrimitive,
+};
 use sqlx::types::{chrono, BigDecimal};
 use tap_core::{
     manager::adapters::{RAVRead, RAVStore},
     rav::{ReceiptAggregateVoucher, SignedRAV},
 };
+
+use super::{error::AdapterError, TapAgentContext};
 
 #[async_trait::async_trait]
 impl RAVRead for TapAgentContext {

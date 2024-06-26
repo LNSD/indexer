@@ -1,7 +1,8 @@
 // Copyright 2023-, GraphOps and Semiotic Labs.
 // SPDX-License-Identifier: Apache-2.0
-use anyhow::anyhow;
 use std::time::{Duration, SystemTime};
+
+use anyhow::anyhow;
 
 pub struct TimestampCheck {
     timestamp_error_tolerance: Duration,
@@ -44,17 +45,14 @@ mod tests {
     use std::str::FromStr;
 
     use alloy_primitives::Address;
-    use alloy_sol_types::eip712_domain;
-    use alloy_sol_types::Eip712Domain;
-
-    use ethers::signers::coins_bip39::English;
-    use ethers::signers::{LocalWallet, MnemonicBuilder};
-
-    use super::*;
+    use alloy_sol_types::{eip712_domain, Eip712Domain};
+    use ethers::signers::{coins_bip39::English, LocalWallet, MnemonicBuilder};
     use tap_core::{
         receipt::{checks::Check, Checking, Receipt, ReceiptWithState},
         signed_message::EIP712SignedMessage,
     };
+
+    use super::*;
 
     fn create_signed_receipt_with_custom_timestamp(
         timestamp_ns: u64,

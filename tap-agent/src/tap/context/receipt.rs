@@ -16,9 +16,8 @@ use tap_core::{
 };
 use thegraph::types::Address;
 
-use crate::tap::signers_trimmed;
-
 use super::{error::AdapterError, TapAgentContext};
+use crate::tap::signers_trimmed;
 impl From<TryFromIntError> for AdapterError {
     fn from(error: TryFromIntError) -> Self {
         AdapterError::ReceiptRead {
@@ -192,6 +191,15 @@ impl ReceiptDelete for TapAgentContext {
 
 #[cfg(test)]
 mod test {
+    use std::collections::HashMap;
+
+    use anyhow::Result;
+    use ethers_signers::LocalWallet;
+    use eventuals::Eventual;
+    use indexer_common::escrow_accounts::EscrowAccounts;
+    use lazy_static::lazy_static;
+    use sqlx::PgPool;
+
     use super::*;
     use crate::tap::{
         escrow_adapter::EscrowAdapter,
@@ -200,13 +208,6 @@ mod test {
             TAP_EIP712_DOMAIN_SEPARATOR,
         },
     };
-    use anyhow::Result;
-    use ethers_signers::LocalWallet;
-    use eventuals::Eventual;
-    use indexer_common::escrow_accounts::EscrowAccounts;
-    use lazy_static::lazy_static;
-    use sqlx::PgPool;
-    use std::collections::HashMap;
 
     lazy_static! {
         pub static ref SENDER_IRRELEVANT: (LocalWallet, Address) = wallet(1);

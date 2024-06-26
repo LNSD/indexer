@@ -65,9 +65,8 @@ mod test {
     use axum_extra::headers::Header;
     use thegraph::types::Address;
 
-    use crate::test_vectors::create_signed_receipt;
-
     use super::TapReceipt;
+    use crate::test_vectors::create_signed_receipt;
 
     #[tokio::test]
     async fn test_decode_valid_tap_receipt_header() {

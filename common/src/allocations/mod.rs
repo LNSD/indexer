@@ -3,8 +3,7 @@
 
 use ethers_core::types::U256;
 use serde::{Deserialize, Deserializer};
-use thegraph::types::Address;
-use thegraph::types::DeploymentId;
+use thegraph::types::{Address, DeploymentId};
 
 pub mod monitor;
 

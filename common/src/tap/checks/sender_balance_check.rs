@@ -1,7 +1,6 @@
 // Copyright 2023-, GraphOps and Semiotic Labs.
 // SPDX-License-Identifier: Apache-2.0
 
-use crate::escrow_accounts::EscrowAccounts;
 use alloy_sol_types::Eip712Domain;
 use anyhow::anyhow;
 use ethers_core::types::U256;
@@ -11,6 +10,8 @@ use tap_core::receipt::{
     Checking, ReceiptWithState,
 };
 use tracing::error;
+
+use crate::escrow_accounts::EscrowAccounts;
 
 pub struct SenderBalanceCheck {
     escrow_accounts: Eventual<EscrowAccounts>,

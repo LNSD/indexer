@@ -9,31 +9,28 @@ use std::{
 use alloy_sol_types::eip712_domain;
 use anyhow;
 use autometrics::prometheus_exporter;
-use axum::extract::MatchedPath;
-use axum::extract::Request as ExtractRequest;
-use axum::http::{Method, Request};
 use axum::{
     async_trait,
+    extract::{MatchedPath, Request as ExtractRequest},
+    http::{Method, Request},
     response::{IntoResponse, Response},
     routing::{get, post},
-    Extension, Json, Router,
+    serve, Extension, Json, Router, ServiceExt,
 };
-use axum::{serve, ServiceExt};
 use build_info::BuildInfo;
 use eventuals::Eventual;
 use reqwest::StatusCode;
 use serde::{de::DeserializeOwned, Serialize};
 use sqlx::postgres::PgPoolOptions;
 use tap_core::{manager::Manager, receipt::checks::Checks};
-use thegraph::types::Address;
-use thegraph::types::{Attestation, DeploymentId};
+use thegraph::types::{Address, Attestation, DeploymentId};
 use thiserror::Error;
-use tokio::net::TcpListener;
-use tokio::signal;
+use tokio::{net::TcpListener, signal};
 use tower_governor::{governor::GovernorConfigBuilder, GovernorLayer};
 use tower_http::{cors, cors::CorsLayer, normalize_path::NormalizePath, trace::TraceLayer};
 use tracing::{info, info_span};
 
+use super::{request_handler::request_handler, IndexerServiceConfig};
 use crate::{
     address::public_key,
     indexer_service::http::{
@@ -45,8 +42,6 @@ use crate::{
     },
     tap::IndexerTapContext,
 };
-
-use super::{request_handler::request_handler, IndexerServiceConfig};
 
 pub trait IndexerServiceResponse {
     type Data: IntoResponse;

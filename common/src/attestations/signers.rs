@@ -1,10 +1,10 @@
 // Copyright 2023-, GraphOps and Semiotic Labs.
 // SPDX-License-Identifier: Apache-2.0
 
+use std::{collections::HashMap, sync::Arc};
+
 use ethers_core::types::U256;
 use eventuals::{join, Eventual, EventualExt};
-use std::collections::HashMap;
-use std::sync::Arc;
 use thegraph::types::Address;
 use tokio::sync::Mutex;
 use tracing::warn;
@@ -61,11 +61,10 @@ pub fn attestation_signers(
 
 #[cfg(test)]
 mod tests {
+    use super::*;
     use crate::test_vectors::{
         DISPUTE_MANAGER_ADDRESS, INDEXER_ALLOCATIONS, INDEXER_OPERATOR_MNEMONIC,
     };
-
-    use super::*;
 
     #[tokio::test]
     async fn test_attestation_signers_update_with_allocations() {

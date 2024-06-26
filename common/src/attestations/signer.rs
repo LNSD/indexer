@@ -2,11 +2,9 @@
 // SPDX-License-Identifier: Apache-2.0
 
 use alloy_sol_types::Eip712Domain;
-use ethers::signers::coins_bip39::English;
-use ethers::signers::{MnemonicBuilder, Signer, Wallet};
+use ethers::signers::{coins_bip39::English, MnemonicBuilder, Signer, Wallet};
 use ethers_core::k256::ecdsa::SigningKey;
-use thegraph::types::{attestation, Attestation, DeploymentId};
-use thegraph::types::{Address, U256};
+use thegraph::types::{attestation, Address, Attestation, DeploymentId, U256};
 
 use crate::prelude::Allocation;
 
@@ -124,16 +122,16 @@ fn wallet_for_allocation(
 
 #[cfg(test)]
 mod tests {
-    use ethers_core::types::U256;
     use std::str::FromStr;
+
+    use ethers_core::types::U256;
     use test_log::test;
 
+    use super::*;
     use crate::{
         prelude::{Allocation, AllocationStatus, SubgraphDeployment},
         test_vectors::DISPUTE_MANAGER_ADDRESS,
     };
-
-    use super::*;
 
     const INDEXER_OPERATOR_MNEMONIC: &str = "abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon abandon about";
 

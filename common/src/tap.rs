@@ -1,21 +1,24 @@
 // Copyright 2023-, GraphOps and Semiotic Labs.
 // SPDX-License-Identifier: Apache-2.0
 
-use crate::tap::checks::allocation_eligible::AllocationEligible;
-use crate::tap::checks::deny_list_check::DenyListCheck;
-use crate::tap::checks::receipt_max_val_check::ReceiptMaxValueCheck;
-use crate::tap::checks::sender_balance_check::SenderBalanceCheck;
-use crate::tap::checks::timestamp_check::TimestampCheck;
-use crate::{escrow_accounts::EscrowAccounts, prelude::Allocation};
+use std::{collections::HashMap, fmt::Debug, sync::Arc, time::Duration};
+
 use alloy_sol_types::Eip712Domain;
 use eventuals::Eventual;
 use sqlx::PgPool;
-use std::fmt::Debug;
-use std::time::Duration;
-use std::{collections::HashMap, sync::Arc};
 use tap_core::receipt::checks::ReceiptCheck;
 use thegraph::types::Address;
 use tracing::error;
+
+use crate::{
+    escrow_accounts::EscrowAccounts,
+    prelude::Allocation,
+    tap::checks::{
+        allocation_eligible::AllocationEligible, deny_list_check::DenyListCheck,
+        receipt_max_val_check::ReceiptMaxValueCheck, sender_balance_check::SenderBalanceCheck,
+        timestamp_check::TimestampCheck,
+    },
+};
 
 mod checks;
 mod receipt_store;

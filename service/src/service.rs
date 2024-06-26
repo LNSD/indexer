@@ -1,26 +1,24 @@
 // Copyright 2023-, GraphOps and Semiotic Labs.
 // SPDX-License-Identifier: Apache-2.0
 
-use std::sync::Arc;
-use std::time::Duration;
+use std::{sync::Arc, time::Duration};
 
-use super::{config::Config, error::SubgraphServiceError, routes};
 use anyhow::anyhow;
 use axum::{async_trait, routing::post, Json, Router};
-use indexer_common::indexer_service::http::{IndexerServiceImpl, IndexerServiceResponse};
+use clap::Parser;
+use indexer_common::indexer_service::http::{
+    IndexerService, IndexerServiceImpl, IndexerServiceOptions, IndexerServiceRelease,
+    IndexerServiceResponse,
+};
 use indexer_config::Config as MainConfig;
 use reqwest::Url;
 use serde_json::{json, Value};
 use sqlx::PgPool;
 use thegraph::types::{Attestation, DeploymentId};
-
-use crate::{cli::Cli, database};
-
-use clap::Parser;
-use indexer_common::indexer_service::http::{
-    IndexerService, IndexerServiceOptions, IndexerServiceRelease,
-};
 use tracing::error;
+
+use super::{config::Config, error::SubgraphServiceError, routes};
+use crate::{cli::Cli, database};
 
 #[derive(Debug)]
 struct SubgraphServiceResponse {

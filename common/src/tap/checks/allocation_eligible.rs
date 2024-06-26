@@ -6,7 +6,6 @@ use std::collections::HashMap;
 use alloy_primitives::Address;
 use anyhow::anyhow;
 use eventuals::Eventual;
-
 use tap_core::receipt::{
     checks::{Check, CheckResult},
     Checking, ReceiptWithState,

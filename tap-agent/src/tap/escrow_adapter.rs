@@ -96,9 +96,8 @@ impl EscrowAdapterTrait for EscrowAdapter {
 mod test {
     use std::{collections::HashMap, vec};
 
-    use crate::tap::test_utils::{SENDER, SIGNER};
-
     use super::*;
+    use crate::tap::test_utils::{SENDER, SIGNER};
 
     impl super::EscrowAdapter {
         pub fn mock() -> Self {
