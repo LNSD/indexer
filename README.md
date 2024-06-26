@@ -3,6 +3,7 @@ indexer
 
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](./LICENSE)
 [![ci](https://github.com/LNSD/indexer/actions/workflows/ci.yml/badge.svg)](https://github.com/LNSD/indexer/actions/workflows/ci.yml)
+[![Coverage Status](https://coveralls.io/repos/github/LNSD/indexer/badge.svg)](https://coveralls.io/github/LNSD/indexer)
 
 An alternative implementation for _The Graph_ [indexer](https://github.com/graphprotocol/indexer) software.
 
