@@ -10,7 +10,8 @@ pub struct TimestampCheck {
 
 use tap_core::receipt::{
     checks::{Check, CheckResult},
-    Checking, ReceiptWithState,
+    state::Checking,
+    ReceiptWithState,
 };
 
 impl TimestampCheck {
@@ -48,7 +49,7 @@ mod tests {
     use alloy_sol_types::{eip712_domain, Eip712Domain};
     use ethers::signers::{coins_bip39::English, LocalWallet, MnemonicBuilder};
     use tap_core::{
-        receipt::{checks::Check, Checking, Receipt, ReceiptWithState},
+        receipt::{checks::Check, state::Checking, Receipt, ReceiptWithState},
         signed_message::EIP712SignedMessage,
     };
 

@@ -5940,9 +5940,9 @@ checksum = "55937e1799185b12863d447f42597ed69d9928686b8d88a1df17376a097d8369"
 
 [[package]]
 name = "tap_core"
-version = "0.8.0"
+version = "1.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8ad526409d342a57c965a18f6a9138f999b12ca5d0529c198f8ae4a2395b0561"
+checksum = "6ee4bdef618598aad5fc955500ab152cca403698f09efb686f277046b7cca915"
 dependencies = [
  "alloy-primitives 0.6.4",
  "alloy-sol-types 0.6.4",

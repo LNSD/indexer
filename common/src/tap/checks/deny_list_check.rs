@@ -12,7 +12,8 @@ use eventuals::Eventual;
 use sqlx::{postgres::PgListener, PgPool};
 use tap_core::receipt::{
     checks::{Check, CheckResult},
-    Checking, ReceiptWithState,
+    state::Checking,
+    ReceiptWithState,
 };
 use thegraph::types::Address;
 use tracing::error;
