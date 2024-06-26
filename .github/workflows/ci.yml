@@ -20,12 +20,24 @@ jobs:
         - uses: dtolnay/rust-toolchain@nightly
           with:
             components: rustfmt
-
         - run: cargo +nightly fmt --all -- --check
 
-  sqlx:
-    name: prepared query metadata is up-to-date
+  clippy:
     runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy
+      - name: Cache cargo build files
+        uses: Leafwing-Studios/cargo-cache@c7e8aa40ae2c975774d3bd766beb92927cfd7771 # v1
+
+      - run: cargo clippy --all-features --all-targets -- -Dwarnings --force-warn deprecated --force-warn dead-code
+
+  # Prepared query metadata is up-to-date
+  sqlx:
+    runs-on: ubuntu-latest
+    needs: [ "fmt", "clippy" ]
     services:
       postgres:
         image: postgres:15
@@ -38,55 +50,32 @@ jobs:
           --health-retries 5
         ports:
           - 5432:5432
-    container: 
-      image: rust:1.79-bookworm
     env:
-      DATABASE_URL: postgres://postgres@postgres:5432
+      DATABASE_URL: postgres://postgres@localhost:5432
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
+      - uses: dtolnay/rust-toolchain@stable
         with:
-          path: |
-            ~/.cargo/bin/
-            ~/.cargo/registry/index/
-            ~/.cargo/registry/cache/
-            ~/.cargo/git/db/
-            target/
-          key: ${{ runner.os }}-sqlx-prepare-${{ hashFiles('**/Cargo.lock') }}
-      - name: Install sqlx
-        run: cargo install sqlx-cli --no-default-features --features postgres
-      - name: Run the test sqlx migrations
+          components: rustfmt, clippy, llvm-tools-preview
+      - name: Cache cargo build files
+        uses: Leafwing-Studios/cargo-cache@c7e8aa40ae2c975774d3bd766beb92927cfd7771 # v1
+
+      - name: Install sqlx-cli
+        uses: baptiste0928/cargo-install@9f6037ed331dcf7da101461a20656273fa72abf0 # v3
+        with:
+          crate: sqlx-cli
+          args: --no-default-features
+          features: postgres
+      - name: Run migrations
         run: cargo sqlx migrate run
+
       - name: Check that the sqlx prepared query metadata is up-to-date
         run: cargo sqlx prepare --workspace --check -- --all-targets --all-features
 
-  clippy:
-    name: cargo clippy
-    runs-on: ubuntu-latest
-    container: 
-      image: rust:1.79-bookworm
-    env:
-      DATABASE_URL: postgres://postgres@postgres:5432 
-      SQLX_OFFLINE: true
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4
-        with:
-          path: |
-            ~/.cargo/bin/
-            ~/.cargo/registry/index/
-            ~/.cargo/registry/cache/
-            ~/.cargo/git/db/
-            target/
-          key: ${{ runner.os }}-cargo-clippy-${{ hashFiles('**/Cargo.lock') }}
-      - run: |
-          rustup component add clippy
-          # Temporarily allowing dead-code, while denying all other warnings
-          cargo clippy --all-features --all-targets -- -A dead-code -D warnings
 
-  test-and-coverage:
-    name: cargo test and coverage
+  test:
     runs-on: ubuntu-latest
+    needs: [ "fmt", "clippy", "sqlx" ]
     permissions:
       contents: write
       pull-requests: write
@@ -103,27 +92,30 @@ jobs:
           --health-retries 5
         ports:
           - 5432:5432
-    container:
-      image: rust:1.76-bookworm
     env:
-      DATABASE_URL: postgres://postgres@postgres:5432 
+      DATABASE_URL: postgres://postgres@localhost:5432
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
+      - uses: dtolnay/rust-toolchain@stable
         with:
-          path: |
-            ~/.cargo/bin/
-            ~/.cargo/registry/index/
-            ~/.cargo/registry/cache/
-            ~/.cargo/git/db/
-            target/
-          key: ${{ runner.os }}-cargo-test-${{ hashFiles('**/Cargo.lock') }}
+          components: llvm-tools-preview
       - name: Install cargo-llvm-cov
-        uses: taiki-e/install-action@cargo-llvm-cov
-      - name: Install sqlx
-        run: cargo install sqlx-cli --no-default-features --features postgres
-      - name: Run the test sqlx migrations
+        uses: baptiste0928/cargo-install@9f6037ed331dcf7da101461a20656273fa72abf0 # v3
+        with:
+          crate: cargo-llvm-cov
+
+      - name: Cache cargo build files
+        uses: Leafwing-Studios/cargo-cache@c7e8aa40ae2c975774d3bd766beb92927cfd7771 # v1
+
+      - name: Install sqlx-cli
+        uses: baptiste0928/cargo-install@9f6037ed331dcf7da101461a20656273fa72abf0 # v3
+        with:
+          crate: sqlx-cli
+          args: --no-default-features
+          features: postgres
+      - name: Run migrations
         run: cargo sqlx migrate run
+
       - name: Run tests and generate coverage report
         run: cargo llvm-cov test --all-features --workspace --lcov --output-path lcov.info
       - name: Upload coverage to Coveralls
@@ -133,8 +125,8 @@ jobs:
 
   # Cannot do with llvm-cov, see https://github.com/taiki-e/cargo-llvm-cov/issues/2
   test-docs:
-    name: cargo test docs code snippets
     runs-on: ubuntu-latest
+    needs: [ "fmt", "clippy", "sqlx" ]
     permissions:
       contents: write
       pull-requests: write
@@ -151,24 +143,22 @@ jobs:
           --health-retries 5
         ports:
           - 5432:5432
-    container:
-      image: rust:1.79-bookworm
     env:
-      DATABASE_URL: postgres://postgres@postgres:5432 
+      DATABASE_URL: postgres://postgres@localhost:5432
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Cache cargo build files
+        uses: Leafwing-Studios/cargo-cache@c7e8aa40ae2c975774d3bd766beb92927cfd7771 # v1
+
+      - name: Install sqlx-cli
+        uses: baptiste0928/cargo-install@9f6037ed331dcf7da101461a20656273fa72abf0 # v3
         with:
-          path: |
-            ~/.cargo/bin/
-            ~/.cargo/registry/index/
-            ~/.cargo/registry/cache/
-            ~/.cargo/git/db/
-            target/
-          key: ${{ runner.os }}-cargo-test-docs-${{ hashFiles('**/Cargo.lock') }}
-      - name: Install sqlx
-        run: cargo install sqlx-cli --no-default-features --features postgres
-      - name: Run the test sqlx migrations
+          crate: sqlx-cli
+          args: --no-default-features
+          features: postgres
+      - name: Run migrations
         run: cargo sqlx migrate run
-      - name: Test documentation code snippets
-        run: cargo test --doc --all-features --workspace
+
+      - name: cargo test docs
+        run: cargo test --all-features --workspace --doc
