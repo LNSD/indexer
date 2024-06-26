@@ -99,13 +99,13 @@ jobs:
       - uses: dtolnay/rust-toolchain@stable
         with:
           components: llvm-tools-preview
+      - name: Cache cargo build files
+        uses: Leafwing-Studios/cargo-cache@c7e8aa40ae2c975774d3bd766beb92927cfd7771 # v1
+
       - name: Install cargo-llvm-cov
         uses: baptiste0928/cargo-install@9f6037ed331dcf7da101461a20656273fa72abf0 # v3
         with:
           crate: cargo-llvm-cov
-
-      - name: Cache cargo build files
-        uses: Leafwing-Studios/cargo-cache@c7e8aa40ae2c975774d3bd766beb92927cfd7771 # v1
 
       - name: Install sqlx-cli
         uses: baptiste0928/cargo-install@9f6037ed331dcf7da101461a20656273fa72abf0 # v3

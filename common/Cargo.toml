@@ -28,10 +28,8 @@ sqlx = { version = "0.7.1", features = [
 ] }
 tokio = { version = "1.32.0", features = ["full", "macros", "rt"] }
 thegraph = { git = "https://github.com/edgeandnode/toolshed", tag = "thegraph-v0.5.0" }
-thegraph-graphql-http = { version = "0.2.1", features = [
-    "http-client-reqwest",
-] }
-tap_core = "0.8.0"
+thegraph-graphql-http = { version = "0.2.1", features = ["http-client-reqwest"] }
+tap_core = "1.0.0"
 axum = { version = "0.7.5", default-features = true }
 axum-extra = { version = "0.9.3", features = ["typed-header"] }
 thiserror = "1.0.49"
