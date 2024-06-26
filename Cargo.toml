@@ -1,6 +1,10 @@
 [workspace]
-members = ["common", "config", "service", "tap-agent"]
 resolver = "2"
+members = [
+    "common",
+    "config",
+    "service",
+]
 
 [profile.dev.package."*"]
 opt-level = 3
