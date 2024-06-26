@@ -11,7 +11,7 @@ use axum::{
 };
 use axum_extra::TypedHeader;
 use reqwest::StatusCode;
-use thegraph::types::DeploymentId;
+use thegraph_core::types::DeploymentId;
 use tracing::trace;
 
 use super::{

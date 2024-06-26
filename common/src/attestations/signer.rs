@@ -1,10 +1,11 @@
 // Copyright 2023-, GraphOps and Semiotic Labs.
 // SPDX-License-Identifier: Apache-2.0
 
+use alloy_primitives::U256;
 use alloy_sol_types::Eip712Domain;
 use ethers::signers::{coins_bip39::English, MnemonicBuilder, Signer, Wallet};
 use ethers_core::k256::ecdsa::SigningKey;
-use thegraph::types::{attestation, Address, Attestation, DeploymentId, U256};
+use thegraph_core::types::{attestation, Address, Attestation, DeploymentId};
 
 use crate::prelude::Allocation;
 
@@ -34,7 +35,7 @@ pub fn derive_key_pair(
 }
 
 /// An attestation signer tied to a specific allocation via its signer key
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Clone)]
 pub struct AttestationSigner {
     deployment: DeploymentId,
     domain: Eip712Domain,
@@ -86,6 +87,26 @@ impl AttestationSigner {
             request,
             response,
         )
+    }
+}
+
+impl PartialEq for AttestationSigner {
+    fn eq(&self, other: &Self) -> bool {
+        self.deployment == other.deployment
+            && self.domain == other.domain
+            && self.signer == other.signer
+    }
+}
+
+impl Eq for AttestationSigner {}
+
+impl std::fmt::Debug for AttestationSigner {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.debug_struct("AttestationSigner")
+            .field("deployment", &self.deployment)
+            .field("domain", &self.domain)
+            .field("signer", &self.signer)
+            .finish()
     }
 }
 

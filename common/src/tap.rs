@@ -7,7 +7,7 @@ use alloy_sol_types::Eip712Domain;
 use eventuals::Eventual;
 use sqlx::PgPool;
 use tap_core::receipt::checks::ReceiptCheck;
-use thegraph::types::Address;
+use thegraph_core::types::Address;
 use tracing::error;
 
 use crate::{

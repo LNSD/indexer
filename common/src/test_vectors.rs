@@ -11,7 +11,7 @@ use tap_core::{
     receipt::{Receipt, SignedReceipt},
     signed_message::EIP712SignedMessage,
 };
-use thegraph::types::{Address, DeploymentId};
+use thegraph_core::types::{Address, DeploymentId};
 
 use crate::prelude::{Allocation, AllocationStatus, SubgraphDeployment};
 

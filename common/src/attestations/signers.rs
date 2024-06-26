@@ -5,7 +5,7 @@ use std::{collections::HashMap, sync::Arc};
 
 use ethers_core::types::U256;
 use eventuals::{join, Eventual, EventualExt};
-use thegraph::types::Address;
+use thegraph_core::types::Address;
 use tokio::sync::Mutex;
 use tracing::warn;
 

@@ -14,7 +14,7 @@ use indexer_config::Config as MainConfig;
 use reqwest::Url;
 use serde_json::{json, Value};
 use sqlx::PgPool;
-use thegraph::types::{Attestation, DeploymentId};
+use thegraph_core::types::{Attestation, DeploymentId};
 use tracing::error;
 
 use super::{config::Config, error::SubgraphServiceError, routes};

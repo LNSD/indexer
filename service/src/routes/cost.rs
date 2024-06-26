@@ -8,7 +8,7 @@ use async_graphql_axum::{GraphQLRequest, GraphQLResponse};
 use axum::extract::State;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
-use thegraph::types::DeploymentId;
+use thegraph_core::types::DeploymentId;
 
 use crate::{
     database::{self, CostModel},
