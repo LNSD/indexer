@@ -61,7 +61,7 @@ jobs:
         uses: Leafwing-Studios/cargo-cache@c7e8aa40ae2c975774d3bd766beb92927cfd7771 # v1
 
       - name: Install sqlx-cli
-        uses: baptiste0928/cargo-install@9f6037ed331dcf7da101461a20656273fa72abf0 # v3
+        uses: baptiste0928/cargo-install@904927dbe77864e0f2281519fe9d5bd097a220b3 # v3
         with:
           crate: sqlx-cli
           args: --no-default-features
@@ -103,12 +103,12 @@ jobs:
         uses: Leafwing-Studios/cargo-cache@c7e8aa40ae2c975774d3bd766beb92927cfd7771 # v1
 
       - name: Install cargo-llvm-cov
-        uses: baptiste0928/cargo-install@9f6037ed331dcf7da101461a20656273fa72abf0 # v3
+        uses: baptiste0928/cargo-install@904927dbe77864e0f2281519fe9d5bd097a220b3 # v3
         with:
           crate: cargo-llvm-cov
 
       - name: Install sqlx-cli
-        uses: baptiste0928/cargo-install@9f6037ed331dcf7da101461a20656273fa72abf0 # v3
+        uses: baptiste0928/cargo-install@904927dbe77864e0f2281519fe9d5bd097a220b3 # v3
         with:
           crate: sqlx-cli
           args: --no-default-features
