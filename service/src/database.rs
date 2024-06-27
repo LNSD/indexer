@@ -7,10 +7,9 @@ use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use sqlx::{postgres::PgPoolOptions, PgPool};
 use thegraph_core::types::{DeploymentId, DeploymentIdError};
-use tracing::debug;
 
 pub async fn connect(url: &str) -> PgPool {
-    debug!("Connecting to database");
+    tracing::debug!("Connecting to database");
 
     PgPoolOptions::new()
         .max_connections(50)
@@ -202,7 +201,6 @@ fn merge_global(model: CostModel, global_model: &DbCostModel) -> CostModel {
 
 #[cfg(test)]
 mod test {
-
     use std::str::FromStr;
 
     use sqlx::PgPool;

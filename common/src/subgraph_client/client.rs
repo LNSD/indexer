@@ -13,7 +13,6 @@ use thegraph_graphql_http::{
     http::request::{IntoRequestParameters, RequestParameters},
 };
 use tokio::sync::Mutex;
-use tracing::warn;
 
 use super::monitor::{monitor_deployment_status, DeploymentStatus};
 
@@ -149,9 +148,10 @@ impl DeploymentClient {
             .query::<T>(query)
             .await
             .inspect_err(|err| {
-                warn!(
+                tracing::warn!(
                     "Failed to query subgraph deployment `{}`: {}",
-                    self.query_url, err
+                    self.query_url,
+                    err
                 );
             }))
     }
@@ -177,9 +177,10 @@ impl DeploymentClient {
             .paginated_query::<T>(query, items_per_page)
             .await
             .map_err(|err| {
-                warn!(
+                tracing::warn!(
                     "Failed to query subgraph deployment `{}`: {}",
-                    self.query_url, err
+                    self.query_url,
+                    err
                 );
                 anyhow!(err)
             })
@@ -235,7 +236,7 @@ impl SubgraphClient {
         if let Some(ref local_client) = self.local_client {
             match local_client.query(query.clone()).await {
                 Ok(response) => return Ok(response),
-                Err(err) => warn!(
+                Err(err) => tracing::warn!(
                     "Failed to query local subgraph deployment `{}`, trying remote deployment next: {}",
                     local_client.query_url, err
                 ),
@@ -244,9 +245,10 @@ impl SubgraphClient {
 
         // Try the remote client
         self.remote_client.query::<T>(query).await.map_err(|err| {
-            warn!(
+            tracing::warn!(
                 "Failed to query remote subgraph deployment `{}`: {}",
-                self.remote_client.query_url, err
+                self.remote_client.query_url,
+                err
             );
             err
         })
@@ -258,7 +260,7 @@ impl SubgraphClient {
         if let Some(ref local_client) = self.local_client {
             match local_client.query_raw(query.clone()).await {
                 Ok(response) => return Ok(response),
-                Err(err) => warn!(
+                Err(err) => tracing::warn!(
                     "Failed to query local subgraph deployment `{}`, trying remote deployment next: {}",
                     local_client.query_url, err
                 ),
@@ -267,9 +269,10 @@ impl SubgraphClient {
 
         // Try the remote client
         self.remote_client.query_raw(query).await.map_err(|err| {
-            warn!(
+            tracing::warn!(
                 "Failed to query remote subgraph deployment `{}`: {}",
-                self.remote_client.query_url, err
+                self.remote_client.query_url,
+                err
             );
 
             err
@@ -286,7 +289,7 @@ impl SubgraphClient {
         if let Some(ref local_client) = self.local_client {
             match local_client.paginated_query::<T>(query.clone(), items_per_page).await {
                 Ok(response) => return Ok(response),
-                Err(err) => warn!(
+                Err(err) => tracing::warn!(
                     "Failed to query local subgraph deployment `{}`, trying remote deployment next: {}",
                     local_client.query_url, err
                 ),
@@ -297,9 +300,10 @@ impl SubgraphClient {
             .paginated_query::<T>(query, 1000)
             .await
             .map_err(|err| {
-                warn!(
+                tracing::warn!(
                     "Failed to query remote subgraph deployment `{}`: {}",
-                    self.remote_client.query_url, err
+                    self.remote_client.query_url,
+                    err
                 );
                 anyhow!(err)
             })

@@ -70,7 +70,7 @@ pub async fn build_schema() -> CostSchema {
     Schema::build(Query, EmptyMutation, EmptySubscription).finish()
 }
 
-pub async fn cost(
+pub async fn handle(
     State(state): State<Arc<SubgraphServiceState>>,
     req: GraphQLRequest,
 ) -> GraphQLResponse {

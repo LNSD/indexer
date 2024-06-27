@@ -13,6 +13,7 @@ use tap_core::receipt::{
 };
 
 use crate::prelude::Allocation;
+
 pub struct AllocationEligible {
     indexer_allocations: Eventual<HashMap<Address, Allocation>>,
 }

@@ -28,7 +28,6 @@ use thiserror::Error;
 use tokio::{net::TcpListener, signal};
 use tower_governor::{governor::GovernorConfigBuilder, GovernorLayer};
 use tower_http::{cors, cors::CorsLayer, normalize_path::NormalizePath, trace::TraceLayer};
-use tracing::{info, info_span};
 
 use super::{request_handler::request_handler, IndexerServiceConfig};
 use crate::{
@@ -340,7 +339,7 @@ impl IndexerService {
         );
 
         if options.config.network_subgraph.serve_subgraph {
-            info!("Serving network subgraph at /network");
+            tracing::info!("Serving network subgraph at /network");
 
             misc_routes = misc_routes.route(
                 "/network",
@@ -359,7 +358,7 @@ impl IndexerService {
         }
 
         if options.config.escrow_subgraph.serve_subgraph {
-            info!("Serving escrow subgraph at /escrow");
+            tracing::info!("Serving escrow subgraph at /escrow");
 
             misc_routes = misc_routes
                 .route("/escrow", post(static_subgraph_request_handler::<I>))
@@ -404,7 +403,7 @@ impl IndexerService {
                                 .get::<MatchedPath>()
                                 .map(MatchedPath::as_str);
 
-                            info_span!(
+                            tracing::info_span!(
                                 "http_request",
                                 %method,
                                 %uri,
@@ -423,7 +422,7 @@ impl IndexerService {
 
         Self::serve_metrics(options.config.server.metrics_host_and_port);
 
-        info!(
+        tracing::info!(
             address = %options.config.server.host_and_port,
             "Serving requests",
         );
@@ -440,7 +439,7 @@ impl IndexerService {
     }
 
     fn serve_metrics(host_and_port: SocketAddr) {
-        info!(address = %host_and_port, "Serving prometheus metrics");
+        tracing::info!(address = %host_and_port, "Serving prometheus metrics");
 
         tokio::spawn(async move {
             let router = Router::new().route(
@@ -479,5 +478,5 @@ pub async fn shutdown_signal() {
         _ = terminate => {},
     }
 
-    info!("Signal received, starting graceful shutdown");
+    tracing::info!("Signal received, starting graceful shutdown");
 }

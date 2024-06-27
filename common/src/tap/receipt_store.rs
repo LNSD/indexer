@@ -9,7 +9,6 @@ use tap_core::{
     manager::adapters::ReceiptStore,
     receipt::{state::Checking, ReceiptWithState},
 };
-use tracing::error;
 
 use super::{AdapterError, IndexerTapContext};
 
@@ -28,7 +27,7 @@ impl ReceiptStore for IndexerTapContext {
         let receipt_signer = receipt
             .recover_signer(self.domain_separator.as_ref())
             .map_err(|e| {
-                error!("Failed to recover receipt signer: {}", e);
+                tracing::error!("Failed to recover receipt signer: {}", e);
                 anyhow!(e)
             })?;
 
@@ -48,7 +47,7 @@ impl ReceiptStore for IndexerTapContext {
         .execute(&self.pgpool)
         .await
         .map_err(|e| {
-            error!("Failed to store receipt: {}", e);
+            tracing::error!("Failed to store receipt: {}", e);
             anyhow!(e)
         })?;
 

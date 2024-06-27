@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: Apache-2.0
 
 use axum::{body::Bytes, http::HeaderMap, response::IntoResponse, Extension};
-use tracing::warn;
 
 use super::{indexer_service::IndexerServiceError, IndexerServiceImpl};
 use crate::subgraph_client::SubgraphClient;
@@ -43,7 +42,7 @@ where
             .text()
             .await
             .map_err(|e| {
-                warn!("Failed to read response body: {}", e);
+                tracing::warn!("Failed to read response body: {}", e);
                 e
             })
             .map_err(|e| IndexerServiceError::FailedToQueryStaticSubgraph(e.into()))?,

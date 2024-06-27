@@ -6,8 +6,6 @@ use std::{
     fmt::{self, Display},
 };
 
-use tracing::warn;
-
 use crate::metrics;
 
 const ERROR_BASE_URL: &str = "https://github.com/graphprotocol/indexer/blob/main/docs/errors.md";
@@ -308,7 +306,7 @@ impl IndexerError {
             .with_label_values(&[&code.to_string()])
             .inc();
         let explanation = code.message();
-        warn!(
+        tracing::warn!(
             "Encountered error {}: {}. Cause: {:#?}",
             code.to_string(),
             explanation,

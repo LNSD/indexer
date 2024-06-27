@@ -13,7 +13,6 @@ use thegraph_graphql_http::{
     http_client::{ReqwestExt, ResponseResult},
 };
 use tokio::time::sleep;
-use tracing::warn;
 
 use super::Query;
 
@@ -71,9 +70,10 @@ pub fn monitor_deployment_status(
             }
         },
         move |err: String| async move {
-            warn!(
+            tracing::warn!(
                 "Error querying deployment status for `{}`: {}",
-                deployment, err
+                deployment,
+                err
             );
             sleep(Duration::from_secs(15)).await
         },

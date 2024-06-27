@@ -3,16 +3,15 @@
 use std::time::{Duration, SystemTime};
 
 use anyhow::anyhow;
-
-pub struct TimestampCheck {
-    timestamp_error_tolerance: Duration,
-}
-
 use tap_core::receipt::{
     checks::{Check, CheckResult},
     state::Checking,
     ReceiptWithState,
 };
+
+pub struct TimestampCheck {
+    timestamp_error_tolerance: Duration,
+}
 
 impl TimestampCheck {
     pub fn new(timestamp_error_tolerance: Duration) -> Self {
