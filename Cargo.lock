@@ -5966,9 +5966,9 @@ dependencies = [
 
 [[package]]
 name = "thegraph-graphql-http"
-version = "0.2.1"
+version = "0.2.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c5b7231f969a5168347a7efac9f92cc83a4ada280238139ade4d82d45360b99c"
+checksum = "db48c0cb52c4d960017b8354340c509ef61bfa843cb1a4ff2fed34daa5e6f7a3"
 dependencies = [
  "async-trait",
  "reqwest 0.12.4",
