@@ -23,7 +23,7 @@ use reqwest::StatusCode;
 use serde::{de::DeserializeOwned, Serialize};
 use sqlx::postgres::PgPoolOptions;
 use tap_core::{manager::Manager, receipt::checks::CheckList as Checks};
-use thegraph::types::{Address, Attestation, DeploymentId};
+use thegraph_core::types::{Address, Attestation, DeploymentId};
 use thiserror::Error;
 use tokio::{net::TcpListener, signal};
 use tower_governor::{governor::GovernorConfigBuilder, GovernorLayer};

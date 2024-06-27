@@ -15,7 +15,7 @@ use tap_core::receipt::{
     state::Checking,
     ReceiptWithState,
 };
-use thegraph::types::Address;
+use thegraph_core::types::Address;
 use tracing::error;
 
 use crate::escrow_accounts::EscrowAccounts;

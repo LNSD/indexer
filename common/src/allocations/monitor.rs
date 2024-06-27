@@ -7,7 +7,7 @@ use std::{
 };
 
 use eventuals::{timer, Eventual, EventualExt};
-use thegraph::types::Address;
+use thegraph_core::types::Address;
 use tokio::time::sleep;
 use tracing::warn;
 

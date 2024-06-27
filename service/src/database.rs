@@ -6,7 +6,7 @@ use std::{collections::HashSet, str::FromStr, time::Duration};
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use sqlx::{postgres::PgPoolOptions, PgPool};
-use thegraph::types::{DeploymentId, DeploymentIdError};
+use thegraph_core::types::{DeploymentId, DeploymentIdError};
 use tracing::debug;
 
 pub async fn connect(url: &str) -> PgPool {

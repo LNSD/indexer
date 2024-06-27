@@ -79,28 +79,6 @@ checksum = "5c6cb57a04249c6480766f7f7cef5467412af1490f8d1e243141daddada3264f"
 
 [[package]]
 name = "alloy-primitives"
-version = "0.6.4"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "600d34d8de81e23b6d909c094e23b3d357e01ca36b78a8c5424c501eedbe86f0"
-dependencies = [
- "alloy-rlp",
- "bytes",
- "cfg-if",
- "const-hex",
- "derive_more",
- "hex-literal",
- "itoa",
- "k256",
- "keccak-asm",
- "proptest",
- "rand 0.8.5",
- "ruint",
- "serde",
- "tiny-keccak",
-]
-
-[[package]]
-name = "alloy-primitives"
 version = "0.7.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "db8aa973e647ec336810a9356af8aea787249c9d00b1525359f3db29a68d231b"
@@ -133,24 +111,6 @@ dependencies = [
 
 [[package]]
 name = "alloy-sol-macro"
-version = "0.6.4"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e86ec0a47740b20bc5613b8712d0d321d031c4efc58e9645af96085d5cccfc27"
-dependencies = [
- "const-hex",
- "dunce",
- "heck 0.4.1",
- "indexmap 2.2.6",
- "proc-macro-error",
- "proc-macro2",
- "quote",
- "syn 2.0.65",
- "syn-solidity 0.6.4",
- "tiny-keccak",
-]
-
-[[package]]
-name = "alloy-sol-macro"
 version = "0.7.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7dbd17d67f3e89478c8a634416358e539e577899666c927bc3d2b1328ee9b6ca"
@@ -177,7 +137,7 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn 2.0.65",
- "syn-solidity 0.7.4",
+ "syn-solidity",
  "tiny-keccak",
 ]
 
@@ -193,19 +153,7 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn 2.0.65",
- "syn-solidity 0.7.4",
-]
-
-[[package]]
-name = "alloy-sol-types"
-version = "0.6.4"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ad09ec5853fa700d12d778ad224dcdec636af424d29fad84fb9a2f16a5b0ef09"
-dependencies = [
- "alloy-primitives 0.6.4",
- "alloy-sol-macro 0.6.4",
- "const-hex",
- "serde",
+ "syn-solidity",
 ]
 
 [[package]]
@@ -214,8 +162,8 @@ version = "0.7.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "40a64d2d2395c1ac636b62419a7b17ec39031d6b2367e66e9acbf566e6055e9c"
 dependencies = [
- "alloy-primitives 0.7.4",
- "alloy-sol-macro 0.7.4",
+ "alloy-primitives",
+ "alloy-sol-macro",
  "const-hex",
  "serde",
 ]
@@ -3012,8 +2960,8 @@ checksum = "ce23b50ad8242c51a442f3ff322d56b02f08852c77e4c0b4d3fd684abc89c683"
 name = "indexer-common"
 version = "0.1.0"
 dependencies = [
- "alloy-primitives 0.6.4",
- "alloy-sol-types 0.6.4",
+ "alloy-primitives",
+ "alloy-sol-types",
  "anyhow",
  "arc-swap",
  "async-trait",
@@ -3037,7 +2985,6 @@ dependencies = [
  "sqlx",
  "tap_core",
  "test-log",
- "thegraph",
  "thegraph-core",
  "thegraph-graphql-http",
  "thiserror",
@@ -3053,7 +3000,7 @@ dependencies = [
 name = "indexer-config"
 version = "1.0.0-rc.2"
 dependencies = [
- "alloy-primitives 0.6.4",
+ "alloy-primitives",
  "bigdecimal 0.4.3",
  "bip39",
  "figment",
@@ -3061,7 +3008,7 @@ dependencies = [
  "serde_repr",
  "serde_test",
  "serde_with",
- "thegraph",
+ "thegraph-core",
  "toml",
  "tracing",
  "url",
@@ -5324,7 +5271,7 @@ dependencies = [
  "serde",
  "serde_json",
  "sqlx",
- "thegraph",
+ "thegraph-core",
  "thegraph-graphql-http",
  "thiserror",
  "tokio",
@@ -5865,18 +5812,6 @@ dependencies = [
 
 [[package]]
 name = "syn-solidity"
-version = "0.6.4"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "cb3d0961cd53c23ea94eeec56ba940f636f6394788976e9f16ca5ee0aca7464a"
-dependencies = [
- "paste",
- "proc-macro2",
- "quote",
- "syn 2.0.65",
-]
-
-[[package]]
-name = "syn-solidity"
 version = "0.7.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b8db114c44cf843a8bacd37a146e37987a0b823a0e8bc4fdc610c9c72ab397a5"
@@ -5941,11 +5876,10 @@ checksum = "55937e1799185b12863d447f42597ed69d9928686b8d88a1df17376a097d8369"
 [[package]]
 name = "tap_core"
 version = "1.0.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6ee4bdef618598aad5fc955500ab152cca403698f09efb686f277046b7cca915"
+source = "git+https://github.com/semiotic-ai/timeline-aggregation-protocol?rev=483a712#483a712d11056cdbe454f6be840f3d2d04b33c2d"
 dependencies = [
- "alloy-primitives 0.6.4",
- "alloy-sol-types 0.6.4",
+ "alloy-primitives",
+ "alloy-sol-types",
  "anyhow",
  "async-trait",
  "ethereum-types",
@@ -6009,30 +5943,13 @@ dependencies = [
 ]
 
 [[package]]
-name = "thegraph"
-version = "0.5.0"
-source = "git+https://github.com/edgeandnode/toolshed?tag=thegraph-v0.5.0#7ab59b4fe0b19cd520edf025b72ad323be8e0506"
-dependencies = [
- "alloy-primitives 0.6.4",
- "alloy-sol-types 0.6.4",
- "async-graphql",
- "bs58",
- "ethers-core",
- "lazy_static",
- "serde",
- "serde_with",
- "sha3",
- "thiserror",
-]
-
-[[package]]
 name = "thegraph-core"
-version = "0.5.2"
+version = "0.5.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "96c023f9dac8ebf18761d0f3e517b2665aa76f4149d6c98e3aca5e345b845115"
+checksum = "dc6996049e7c8056c6741cf5e248eb23c035f1100110ee19e0ffcbd4cdd5bae3"
 dependencies = [
- "alloy-primitives 0.7.4",
- "alloy-sol-types 0.7.4",
+ "alloy-primitives",
+ "alloy-sol-types",
  "bs58",
  "ethers-core",
  "indoc",

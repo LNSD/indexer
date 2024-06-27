@@ -10,7 +10,7 @@ use anyhow::Result;
 use ethers_core::types::U256;
 use eventuals::{timer, Eventual, EventualExt};
 use serde::Deserialize;
-use thegraph::types::Address;
+use thegraph_core::types::Address;
 use thiserror::Error;
 use tokio::time::sleep;
 use tracing::{error, warn};

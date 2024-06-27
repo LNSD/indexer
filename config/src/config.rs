@@ -13,7 +13,7 @@ use figment::{
 use serde::Deserialize;
 use serde_repr::Deserialize_repr;
 use serde_with::{serde_as, DurationSecondsWithFrac};
-use thegraph::types::DeploymentId;
+use thegraph_core::types::DeploymentId;
 use tracing::warn;
 use url::Url;
 
