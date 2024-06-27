@@ -308,15 +308,13 @@ impl IndexerService {
         // Rate limits by allowing bursts of 10 requests and requiring 100ms of
         // time between consecutive requests after that, effectively rate
         // limiting to 10 req/s.
-        let misc_rate_limiter = GovernorLayer {
-            config: Box::leak(Box::new(
-                GovernorConfigBuilder::default()
-                    .per_millisecond(100)
-                    .burst_size(10)
-                    .finish()
-                    .expect("Failed to set up rate limiting"),
-            )),
-        };
+        let misc_rate_limiter_config = Arc::new(
+            GovernorConfigBuilder::default()
+                .per_millisecond(100)
+                .burst_size(10)
+                .finish()
+                .expect("Failed to set up rate limiting"),
+        );
 
         let operator_address = Json(
             serde_json::json!({ "publicKey": public_key(&options.config.indexer.operator_mnemonic)?}),
@@ -326,20 +324,20 @@ impl IndexerService {
             .route("/", get("Service is up and running"))
             .route("/version", get(Json(options.release)))
             .route("/info", get(operator_address))
-            .layer(misc_rate_limiter);
+            .layer(GovernorLayer {
+                config: misc_rate_limiter_config,
+            });
 
         // Rate limits by allowing bursts of 50 requests and requiring 20ms of
         // time between consecutive requests after that, effectively rate
         // limiting to 50 req/s.
-        let static_subgraph_rate_limiter = GovernorLayer {
-            config: Box::leak(Box::new(
-                GovernorConfigBuilder::default()
-                    .per_millisecond(20)
-                    .burst_size(50)
-                    .finish()
-                    .expect("Failed to set up rate limiting"),
-            )),
-        };
+        let static_subgraph_rate_limiter_config = Arc::new(
+            GovernorConfigBuilder::default()
+                .per_millisecond(20)
+                .burst_size(50)
+                .finish()
+                .expect("Failed to set up rate limiting"),
+        );
 
         if options.config.network_subgraph.serve_subgraph {
             info!("Serving network subgraph at /network");
@@ -351,7 +349,12 @@ impl IndexerService {
                     .route_layer(Extension(
                         options.config.network_subgraph.serve_auth_token.clone(),
                     ))
-                    .route_layer(static_subgraph_rate_limiter.clone()),
+                    .route_layer(
+                        GovernorLayer {
+                            config: static_subgraph_rate_limiter_config.clone(),
+                        }
+                        .clone(),
+                    ),
             );
         }
 
@@ -364,7 +367,9 @@ impl IndexerService {
                 .route_layer(Extension(
                     options.config.escrow_subgraph.serve_auth_token.clone(),
                 ))
-                .route_layer(static_subgraph_rate_limiter);
+                .route_layer(GovernorLayer {
+                    config: static_subgraph_rate_limiter_config,
+                });
         }
 
         misc_routes = misc_routes.with_state(state.clone());
