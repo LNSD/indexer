@@ -12,7 +12,6 @@ use axum::{
 use axum_extra::TypedHeader;
 use reqwest::StatusCode;
 use thegraph_core::types::DeploymentId;
-use tracing::trace;
 
 use super::{
     indexer_service::{IndexerServiceError, IndexerServiceState},
@@ -32,7 +31,7 @@ pub async fn request_handler<I>(
 where
     I: IndexerServiceImpl + Sync + Send + 'static,
 {
-    trace!("Handling request for deployment `{manifest_id}`");
+    tracing::trace!("Handling request for deployment `{manifest_id}`");
 
     state
         .metrics

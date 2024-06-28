@@ -7,7 +7,6 @@ use eventuals::{timer, Eventual, EventualExt};
 use serde::Deserialize;
 use thegraph_core::types::Address;
 use tokio::time::sleep;
-use tracing::warn;
 
 use crate::subgraph_client::{Query, SubgraphClient};
 
@@ -49,7 +48,7 @@ pub fn dispute_manager(
             })
         },
         move |err: String| {
-            warn!("Failed to query dispute manager for network: {}", err,);
+            tracing::warn!("Failed to query dispute manager for network: {}", err,);
 
             // Sleep for a bit before we retry
             sleep(interval.div_f32(2.0))

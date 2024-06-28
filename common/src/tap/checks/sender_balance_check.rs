@@ -10,7 +10,6 @@ use tap_core::receipt::{
     state::Checking,
     ReceiptWithState,
 };
-use tracing::error;
 
 use crate::escrow_accounts::EscrowAccounts;
 
@@ -38,7 +37,7 @@ impl Check for SenderBalanceCheck {
             .signed_receipt()
             .recover_signer(&self.domain_separator)
             .inspect_err(|e| {
-                error!("Failed to recover receipt signer: {}", e);
+                tracing::error!("Failed to recover receipt signer: {}", e);
             })?;
 
         // We bail if the receipt signer does not have a corresponding sender in the escrow

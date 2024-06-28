@@ -14,7 +14,6 @@ use serde::Deserialize;
 use serde_repr::Deserialize_repr;
 use serde_with::{serde_as, DurationSecondsWithFrac};
 use thegraph_core::types::DeploymentId;
-use tracing::warn;
 use url::Url;
 
 use crate::NonZeroGRT;
@@ -68,7 +67,7 @@ impl Config {
             x if *x <= 1.into() => {
                 return Err("trigger_value_divisor must be greater than 1".to_string())
             }
-            x if *x > 1.into() && *x < 10.into() => warn!(
+            x if *x > 1.into() && *x < 10.into() => tracing::warn!(
                 "It's recommended that trigger_value_divisor \
                 be a value greater than 10."
             ),
@@ -79,7 +78,7 @@ impl Config {
         let usual_grt_price = BigDecimal::from_str("0.0001").unwrap() * ten;
         if self.tap.max_amount_willing_to_lose_grt.get_value() < usual_grt_price.to_u128().unwrap()
         {
-            warn!(
+            tracing::warn!(
                 "Your `max_amount_willing_to_lose_grt` value is too close to zero. \
                 This may deny the sender too often or even break the whole system. \
                 It's recommended it to be a value greater than 100x an usual query price."
@@ -89,7 +88,7 @@ impl Config {
         if self.subgraphs.escrow.config.syncing_interval_secs < Duration::from_secs(10)
             || self.subgraphs.network.config.syncing_interval_secs < Duration::from_secs(10)
         {
-            warn!(
+            tracing::warn!(
                 "Your `syncing_interval_secs` value it too low. \
                 This may overload your graph-node instance, \
                 a recommended value is about 60 seconds."
@@ -99,7 +98,7 @@ impl Config {
         if self.subgraphs.escrow.config.syncing_interval_secs > Duration::from_secs(600)
             || self.subgraphs.network.config.syncing_interval_secs > Duration::from_secs(600)
         {
-            warn!(
+            tracing::warn!(
                 "Your `syncing_interval_secs` value it too high. \
                 This may cause issues while reacting to updates in the blockchain. \
                 a recommended value is about 60 seconds."
@@ -107,7 +106,7 @@ impl Config {
         }
 
         if self.tap.rav_request.timestamp_buffer_secs < Duration::from_secs(10) {
-            warn!(
+            tracing::warn!(
                 "Your `tap.rav_request.timestamp_buffer_secs` value it too low. \
                 You may discart receipts in case of any synchronization issues, \
                 a recommended value is about 30 seconds."

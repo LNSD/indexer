@@ -8,7 +8,6 @@ use eventuals::Eventual;
 use sqlx::PgPool;
 use tap_core::receipt::checks::ReceiptCheck;
 use thegraph_core::types::Address;
-use tracing::error;
 
 use crate::{
     escrow_accounts::EscrowAccounts,

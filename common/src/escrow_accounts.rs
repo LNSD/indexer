@@ -13,7 +13,6 @@ use serde::Deserialize;
 use thegraph_core::types::Address;
 use thiserror::Error;
 use tokio::time::sleep;
-use tracing::{error, warn};
 
 use crate::prelude::{Query, SubgraphClient};
 
@@ -183,7 +182,7 @@ pub fn escrow_accounts(
                         U256::from_dec_str(&account.total_amount_thawing)?,
                     )
                     .unwrap_or_else(|| {
-                        warn!(
+                        tracing::warn!(
                             "Balance minus total amount thawing underflowed for account {}. \
                                  Setting balance to 0, no queries will be served for this sender.",
                             account.sender.id
@@ -214,9 +213,10 @@ pub fn escrow_accounts(
             Ok(EscrowAccounts::new(senders_balances, senders_to_signers))
         },
         move |err: String| {
-            error!(
+            tracing::error!(
                 "Failed to fetch escrow accounts for indexer {:?}: {}",
-                indexer_address, err
+                indexer_address,
+                err
             );
 
             sleep(interval.div_f32(2.0))

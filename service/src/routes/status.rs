@@ -1,11 +1,11 @@
 // Copyright 2023-, GraphOps and Semiotic Labs.
 // SPDX-License-Identifier: Apache-2.0
 
-use std::{collections::HashSet, sync::Arc};
+use std::{collections::BTreeSet, sync::Arc};
 
 use async_graphql_axum::GraphQLRequest;
 use axum::{extract::State, response::IntoResponse, Json};
-use graphql::graphql_parser::query as q;
+use graphql::graphql_parser::{parse_query, query as q};
 use serde_json::{json, Map, Value};
 use thegraph_graphql_http::{
     http::request::{IntoRequestParameters, RequestParameters},
@@ -15,8 +15,8 @@ use thegraph_graphql_http::{
 use crate::{error::SubgraphServiceError, service::SubgraphServiceState};
 
 lazy_static::lazy_static! {
-    static ref SUPPORTED_ROOT_FIELDS: HashSet<&'static str> =
-        vec![
+    static ref SUPPORTED_ROOT_FIELDS: BTreeSet<&'static str> =
+        BTreeSet::from([
             "indexingStatuses",
             "chains",
             "latestBlock",
@@ -27,7 +27,7 @@ lazy_static::lazy_static! {
             "cachedEthereumCalls",
             "subgraphFeatures",
             "apiVersions",
-        ].into_iter().collect();
+        ]);
 }
 
 struct WrappedGraphQLRequest(async_graphql::Request);
@@ -54,13 +54,13 @@ impl IntoRequestParameters for WrappedGraphQLRequest {
 }
 
 // Custom middleware function to process the request before reaching the main handler
-pub async fn status(
+pub async fn handle(
     State(state): State<Arc<SubgraphServiceState>>,
     request: GraphQLRequest,
 ) -> Result<impl IntoResponse, SubgraphServiceError> {
     let request = request.into_inner();
 
-    let query: q::Document<String> = q::parse_query(request.query.as_str())
+    let query: q::Document<String> = parse_query(request.query.as_str())
         .map_err(|e| SubgraphServiceError::InvalidStatusQuery(e.into()))?;
 
     let root_fields = query
@@ -84,13 +84,13 @@ pub async fn status(
                     q::Selection::Field(field) => Some(&field.name),
                     _ => None,
                 })
-                .collect::<HashSet<_>>()
+                .collect::<BTreeSet<_>>()
         });
 
-    let unsupported_root_fields: Vec<_> = root_fields
+    let unsupported_root_fields = root_fields
         .filter(|field| !SUPPORTED_ROOT_FIELDS.contains(field.as_str()))
         .map(ToString::to_string)
-        .collect();
+        .collect::<Vec<_>>();
 
     if !unsupported_root_fields.is_empty() {
         return Err(SubgraphServiceError::UnsupportedStatusQueryFields(

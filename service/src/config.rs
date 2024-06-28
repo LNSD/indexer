@@ -11,7 +11,22 @@ use indexer_config::Config as MainConfig;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
-pub struct Config(pub IndexerServiceConfig);
+pub struct Config(IndexerServiceConfig);
+
+impl Config {
+    /// Unwraps the inner `IndexerServiceConfig` from the `Config`.
+    pub fn into_inner(self) -> IndexerServiceConfig {
+        self.0
+    }
+}
+
+impl std::ops::Deref for Config {
+    type Target = IndexerServiceConfig;
+
+    fn deref(&self) -> &Self::Target {
+        &self.0
+    }
+}
 
 impl From<MainConfig> for Config {
     fn from(value: MainConfig) -> Self {

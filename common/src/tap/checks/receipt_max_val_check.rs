@@ -1,16 +1,15 @@
 // Copyright 2023-, GraphOps and Semiotic Labs.
 // SPDX-License-Identifier: Apache-2.0
 use anyhow::anyhow;
-
-pub struct ReceiptMaxValueCheck {
-    receipt_max_value: u128,
-}
-
 use tap_core::receipt::{
     checks::{Check, CheckResult},
     state::Checking,
     ReceiptWithState,
 };
+
+pub struct ReceiptMaxValueCheck {
+    receipt_max_value: u128,
+}
 
 impl ReceiptMaxValueCheck {
     pub fn new(receipt_max_value: u128) -> Self {

@@ -12,10 +12,9 @@ use indexer_common::indexer_service::http::{
 };
 use indexer_config::Config as MainConfig;
 use reqwest::Url;
-use serde_json::{json, Value};
+use serde_json::json;
 use sqlx::PgPool;
 use thegraph_core::types::{Attestation, DeploymentId};
-use tracing::error;
 
 use super::{config::Config, error::SubgraphServiceError, routes};
 use crate::{cli::Cli, database};
@@ -33,7 +32,7 @@ impl SubgraphServiceResponse {
 }
 
 impl IndexerServiceResponse for SubgraphServiceResponse {
-    type Data = Json<Value>;
+    type Data = Json<serde_json::Value>;
     type Error = SubgraphServiceError; // not used
 
     fn is_attestable(&self) -> bool {
@@ -124,7 +123,7 @@ pub async fn run() -> anyhow::Result<()> {
     // options added for JSON-RPC
     let config =
         MainConfig::parse(indexer_config::ConfigPrefix::Service, &cli.config).map_err(|e| {
-            error!(
+            tracing::error!(
                 "Invalid configuration file `{}`: {}",
                 cli.config.display(),
                 e
@@ -143,7 +142,7 @@ pub async fn run() -> anyhow::Result<()> {
     // that is involved in serving requests
     let state = Arc::new(SubgraphServiceState {
         config: config.clone(),
-        database: database::connect(&config.0.database.postgres_url).await,
+        database: database::connect(&config.database.postgres_url).await,
         cost_schema: routes::cost::build_schema().await,
         graph_node_client: reqwest::ClientBuilder::new()
             .tcp_nodelay(true)
@@ -151,14 +150,12 @@ pub async fn run() -> anyhow::Result<()> {
             .build()
             .expect("Failed to init HTTP client for Graph Node"),
         graph_node_status_url: config
-            .0
             .graph_node
             .as_ref()
             .expect("Config must have `common.graph_node.status_url` set")
             .status_url
             .clone(),
         graph_node_query_base_url: config
-            .0
             .graph_node
             .as_ref()
             .expect("config must have `common.graph_node.query_url` set")
@@ -168,13 +165,13 @@ pub async fn run() -> anyhow::Result<()> {
 
     IndexerService::run(IndexerServiceOptions {
         release,
-        config: config.0.clone(),
+        config: config.into_inner(),
         url_namespace: "subgraphs",
         metrics_prefix: "subgraph",
         service_impl: SubgraphService::new(state.clone()),
         extra_routes: Router::new()
-            .route("/cost", post(routes::cost::cost))
-            .route("/status", post(routes::status))
+            .route("/cost", post(routes::cost::handle))
+            .route("/status", post(routes::status::handle))
             .with_state(state),
     })
     .await

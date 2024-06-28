@@ -16,7 +16,6 @@ use tap_core::receipt::{
     ReceiptWithState,
 };
 use thegraph_core::types::Address;
-use tracing::error;
 
 use crate::escrow_accounts::EscrowAccounts;
 
@@ -133,7 +132,7 @@ impl DenyListCheck {
                         }
                         // UPDATE and TRUNCATE are not expected to happen. Reload the entire denylist.
                         _ => {
-                            error!(
+                            tracing::error!(
                                 "Received an unexpected denylist table notification: {}. Reloading entire \
                                 denylist.",
                                 denylist_notification.tg_op
@@ -157,7 +156,7 @@ impl Check for DenyListCheck {
             .signed_receipt()
             .recover_signer(&self.domain_separator)
             .inspect_err(|e| {
-                error!("Failed to recover receipt signer: {}", e);
+                tracing::error!("Failed to recover receipt signer: {}", e);
             })?;
         let escrow_accounts_snapshot = self.escrow_accounts.value_immediate().unwrap_or_default();
 

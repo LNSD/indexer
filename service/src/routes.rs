@@ -2,6 +2,4 @@
 // SPDX-License-Identifier: Apache-2.0
 
 pub mod cost;
-mod status;
-
-pub use status::status;
+pub mod status;

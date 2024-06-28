@@ -7,7 +7,6 @@ use ethers_core::types::U256;
 use eventuals::{join, Eventual, EventualExt};
 use thegraph_core::types::Address;
 use tokio::sync::Mutex;
-use tracing::warn;
 
 use crate::prelude::{Allocation, AttestationSigner};
 
@@ -43,7 +42,7 @@ pub fn attestation_signers(
                         dispute_manager,
                     );
                     if let Err(e) = signer {
-                        warn!(
+                        tracing::warn!(
                             "Failed to establish signer for allocation {}, deployment {}, createdAtEpoch {}: {}",
                             allocation.id, allocation.subgraph_deployment.id,
                             allocation.created_at_epoch, e

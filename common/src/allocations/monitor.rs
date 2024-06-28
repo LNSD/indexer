@@ -9,7 +9,6 @@ use std::{
 use eventuals::{timer, Eventual, EventualExt};
 use thegraph_core::types::Address;
 use tokio::time::sleep;
-use tracing::warn;
 
 use super::Allocation;
 use crate::prelude::SubgraphClient;
@@ -35,9 +34,10 @@ pub fn indexer_allocations(
         // Need to use string errors here because eventuals `map_with_retry` retries
         // errors that can be cloned
         move |err: String| {
-            warn!(
+            tracing::warn!(
                 "Failed to fetch active or recently closed allocations for indexer {:?}: {}",
-                indexer_address, err
+                indexer_address,
+                err
             );
 
             // Sleep for a bit before we retry
@@ -104,12 +104,13 @@ pub async fn get_allocations(
 
 #[cfg(test)]
 mod test {
-    const NETWORK_SUBGRAPH_URL: &str =
-        "https://api.thegraph.com/subgraphs/name/graphprotocol/graph-network-arbitrum";
     use std::str::FromStr;
 
     use super::*;
     use crate::{prelude::SubgraphClient, subgraph_client::DeploymentDetails};
+
+    const NETWORK_SUBGRAPH_URL: &str =
+        "https://api.thegraph.com/subgraphs/name/graphprotocol/graph-network-arbitrum";
 
     fn network_subgraph_client() -> &'static SubgraphClient {
         Box::leak(Box::new(SubgraphClient::new(
