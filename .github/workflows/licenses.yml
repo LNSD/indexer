@@ -1,31 +1,31 @@
 name: licenses
 on:
-  push:
-    branches: [ main, dev ]
-  pull_request:
   workflow_dispatch:
+  pull_request:
+  push:
+    branches: [ "main" ]
 
 jobs:
   check:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
-      - name: Install addlicense
-        run: |
-          wget https://github.com/google/addlicense/releases/download/v1.1.1/addlicense_1.1.1_Linux_x86_64.tar.gz
-          tar -xzf addlicense_1.1.1_Linux_x86_64.tar.gz 
-          sudo mv addlicense /usr/local/bin
+
+      - name: Install google/addlincense
+        uses: jaxxstorm/action-install-gh-release@25d5e2dd555cd74f1fab9ac1e6ea117acde2c0c4 #v1.12.0
+        with:
+          repo: google/addlicense
+          tag: v1.1.1
+          cache: enable
 
       - name: Check license headers
         run: >
           addlicense \
             -check \
-            -c "GraphOps and Semiotic Labs." \
+            -c "Edge & Node, GraphOps, and Semiotic Labs." \
             -l "apache" \
             -s=only \
-            -ignore '.github/workflows/*.yml' \
-            -ignore '.github/*.yml' \
-            -ignore '.github/workflows/*.yaml' \
-            -ignore '.github/*.yaml' \
+            -ignore '.github/**' \
+            -ignore '.sqlx/**' \
             -ignore 'migrations/*.sql' \
             .
