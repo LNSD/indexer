@@ -10,13 +10,12 @@ use figment::{
     providers::{Env, Format, Toml},
     Figment,
 };
+use indexer_common::grt::NonZeroGRT;
 use serde::Deserialize;
 use serde_repr::Deserialize_repr;
 use serde_with::{serde_as, DurationSecondsWithFrac};
 use thegraph_core::types::DeploymentId;
 use url::Url;
-
-use crate::NonZeroGRT;
 
 #[derive(Debug, Deserialize)]
 #[cfg_attr(test, derive(PartialEq))]
