@@ -3,7 +3,7 @@ resolver = "2"
 members = [
     "common",
     "config",
-    "service",
+    "indexer-broker",
 ]
 
 [profile.dev.package."*"]

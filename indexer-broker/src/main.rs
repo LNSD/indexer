@@ -3,12 +3,10 @@
 
 use std::process::ExitCode;
 
-use service::service::run;
-
 #[tokio::main]
 async fn main() -> ExitCode {
     tracing_subscriber::fmt::init();
-    if let Err(e) = run().await {
+    if let Err(e) = indexer_broker::service::run().await {
         tracing::error!("Indexer service error: {e}");
         return ExitCode::from(1);
     }
