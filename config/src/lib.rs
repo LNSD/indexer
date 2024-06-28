@@ -2,7 +2,5 @@
 // SPDX-License-Identifier: Apache-2.0
 
 pub use config::*;
-pub use grt::*;
 
 mod config;
-mod grt;
