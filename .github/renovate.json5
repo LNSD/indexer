@@ -13,8 +13,19 @@
   rebaseWhen: 'behind-base-branch',
   lockFileMaintenance: {
     enabled: true,
+    automerge: true,
+    automergeType: 'branch'
   },
   packageRules: [
+    {
+      description: "automerge non-major updates",
+      matchUpdateTypes: [
+        "minor",
+        "patch"
+      ],
+      matchCurrentVersion: "!/^0/",
+      automerge: true
+    },
     {
       groupName: 'futures crates',
       groupSlug: 'futures',
