@@ -15,10 +15,12 @@ use thegraph_core::types::DeploymentId;
 
 use super::{
     indexer_service::{IndexerServiceError, IndexerServiceState},
-    tap_receipt_header::TapReceipt,
     IndexerServiceImpl,
 };
-use crate::{indexer_service::http::IndexerServiceResponse, prelude::AttestationSigner};
+use crate::{
+    indexer_service::http::IndexerServiceResponse, prelude::AttestationSigner,
+    tap::http_header::TapReceipt,
+};
 
 #[autometrics::autometrics]
 pub async fn request_handler<I>(
@@ -65,7 +67,7 @@ where
             signers
                 .get(&allocation_id)
                 .cloned()
-                .ok_or_else(|| (IndexerServiceError::NoSignerForAllocation(allocation_id)))?,
+                .ok_or_else(|| IndexerServiceError::NoSignerForAllocation(allocation_id))?,
         );
     } else {
         match headers

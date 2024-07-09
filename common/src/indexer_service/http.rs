@@ -15,4 +15,3 @@ mod indexer_service;
 mod metrics;
 mod request_handler;
 mod static_subgraph;
-mod tap_receipt_header;
