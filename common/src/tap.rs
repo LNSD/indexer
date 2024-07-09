@@ -20,6 +20,7 @@ use crate::{
 };
 
 mod checks;
+pub mod http_header;
 mod receipt_store;
 
 #[derive(Clone)]
