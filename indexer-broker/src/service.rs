@@ -6,7 +6,7 @@ use std::{sync::Arc, time::Duration};
 use anyhow::anyhow;
 use axum::{async_trait, routing::post, Json, Router};
 use clap::Parser;
-use indexer_common::indexer_service::http::{
+use indexer_common::indexer_service::{
     IndexerService, IndexerServiceImpl, IndexerServiceOptions, IndexerServiceRelease,
     IndexerServiceResponse,
 };

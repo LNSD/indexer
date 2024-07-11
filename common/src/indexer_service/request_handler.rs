@@ -13,12 +13,12 @@ use axum_extra::TypedHeader;
 use reqwest::StatusCode;
 use thegraph_core::types::DeploymentId;
 
-use super::{
-    indexer_service::{IndexerServiceError, IndexerServiceState},
-    IndexerServiceImpl,
-};
 use crate::{
-    indexer_service::http::IndexerServiceResponse, prelude::AttestationSigner,
+    indexer_service::{
+        service::{IndexerServiceError, IndexerServiceState},
+        IndexerServiceImpl, IndexerServiceResponse,
+    },
+    prelude::AttestationSigner,
     tap::http_header::TapReceipt,
 };
 

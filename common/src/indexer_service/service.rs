@@ -29,11 +29,11 @@ use tokio::{net::TcpListener, signal};
 use tower_governor::{governor::GovernorConfigBuilder, GovernorLayer};
 use tower_http::{cors, cors::CorsLayer, normalize_path::NormalizePath, trace::TraceLayer};
 
-use super::{request_handler::request_handler, IndexerServiceConfig};
 use crate::{
     address::public_key,
-    indexer_service::http::{
-        metrics::IndexerServiceMetrics, static_subgraph::static_subgraph_request_handler,
+    indexer_service::{
+        metrics::IndexerServiceMetrics, request_handler::request_handler,
+        static_subgraph::static_subgraph_request_handler, IndexerServiceConfig,
     },
     prelude::{
         attestation_signers, dispute_manager, escrow_accounts, indexer_allocations,

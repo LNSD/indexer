@@ -3,8 +3,10 @@
 
 use axum::{body::Bytes, http::HeaderMap, response::IntoResponse, Extension};
 
-use super::{indexer_service::IndexerServiceError, IndexerServiceImpl};
-use crate::subgraph_client::SubgraphClient;
+use crate::{
+    indexer_service::{service::IndexerServiceError, IndexerServiceImpl},
+    subgraph_client::SubgraphClient,
+};
 
 #[autometrics::autometrics]
 pub async fn static_subgraph_request_handler<I>(

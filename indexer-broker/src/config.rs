@@ -3,7 +3,7 @@
 
 use std::net::{Ipv4Addr, SocketAddr, SocketAddrV4};
 
-use indexer_common::indexer_service::http::{
+use indexer_common::indexer_service::{
     DatabaseConfig, GraphNetworkConfig, GraphNodeConfig, IndexerConfig, IndexerServiceConfig,
     ServerConfig, SubgraphConfig, TapConfig,
 };
