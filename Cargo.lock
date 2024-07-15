@@ -5830,16 +5830,15 @@ dependencies = [
 
 [[package]]
 name = "thegraph-core"
-version = "0.5.3"
+version = "0.5.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "dc6996049e7c8056c6741cf5e248eb23c035f1100110ee19e0ffcbd4cdd5bae3"
+checksum = "beaeffb434bc359006ba96553f2e8db2d1fedd37da988d3c89041fce0bd1fd10"
 dependencies = [
  "alloy-primitives",
  "alloy-sol-types",
  "bs58",
  "ethers-core",
  "indoc",
- "lazy_static",
  "reqwest 0.12.5",
  "serde",
  "serde_json",
